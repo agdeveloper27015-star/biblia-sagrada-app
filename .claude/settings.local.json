@@ -38,7 +38,13 @@
       "Bash(unzip:*)",
       "Bash(git -C \"/Users/antonielgomes/Documents/projeto biblia - claude\" init)",
       "Bash(git -C \"/Users/antonielgomes/Documents/projeto biblia - claude\" add .)",
-      "Bash(git -C:*)"
+      "Bash(git -C:*)",
+      "Bash(npx tsc:*)",
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(node_modules/.bin/tsc:*)",
+      "Bash(\"/Users/antonielgomes/Documents/projeto biblia - claude/node_modules/.bin/tsc\" --noEmit --project \"/Users/antonielgomes/Documents/projeto biblia - claude/tsconfig.json\")",
+      "Bash(export PATH:*)",
+      "Bash(node:*)"
     ]
   }
 }

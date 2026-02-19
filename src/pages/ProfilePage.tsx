@@ -33,8 +33,8 @@ function TopNav() {
     fontFamily: 'var(--font-sans)',
     fontSize: '0.8rem',
     fontWeight: isActive(path) ? 700 : 500,
-    color: isActive(path) ? 'var(--text-primary)' : '#9CA3AF',
-    borderBottom: isActive(path) ? '2px solid var(--text-primary)' : '2px solid transparent',
+    color: isActive(path) ? 'var(--accent)' : 'var(--text-muted)',
+    borderBottom: isActive(path) ? '2px solid var(--accent)' : '2px solid transparent',
     paddingBottom: '2px',
     textDecoration: 'none',
     transition: 'color 0.15s',
@@ -174,7 +174,7 @@ function ProfilePage() {
                 {userInitial}
               </span>
             ) : (
-              <User size={40} strokeWidth={1.4} style={{ color: '#9CA3AF' }} />
+              <User size={40} strokeWidth={1.4} style={{ color: 'var(--text-muted)' }} />
             )}
           </div>
 
@@ -193,7 +193,7 @@ function ProfilePage() {
                 >
                   {user.email}
                 </p>
-                <p style={{ fontSize: '0.8rem', color: '#9CA3AF', fontWeight: 400, marginTop: '0.2rem' }}>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 400, marginTop: '0.2rem' }}>
                   Leitor Dedicado
                 </p>
               </>
@@ -209,7 +209,7 @@ function ProfilePage() {
                 >
                   Conta local
                 </p>
-                <p style={{ fontSize: '0.8rem', color: '#9CA3AF', fontWeight: 400, marginTop: '0.2rem' }}>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 400, marginTop: '0.2rem' }}>
                   Entre para sincronizar
                 </p>
               </>
@@ -223,7 +223,7 @@ function ProfilePage() {
               className="flex items-center gap-1.5 transition-opacity active:opacity-50"
               style={{
                 fontSize: '0.75rem',
-                color: '#9CA3AF',
+                color: 'var(--text-muted)',
                 fontWeight: 500,
                 fontFamily: 'var(--font-sans)',
               }}
@@ -274,7 +274,7 @@ function ProfilePage() {
             >
               {streakDays}
             </p>
-            <p style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 500 }}>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>
               Dias seguidos
             </p>
           </div>
@@ -324,7 +324,7 @@ function ProfilePage() {
                 fontWeight: 700,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
-                color: '#9CA3AF',
+                color: 'var(--text-muted)',
               }}
             >
               Estatísticas
@@ -468,7 +468,7 @@ function ProfilePage() {
               <p
                 style={{
                   fontSize: '0.7rem',
-                  color: '#9CA3AF',
+                  color: 'var(--text-muted)',
                   fontWeight: 400,
                   marginLeft: '44px',
                 }}
@@ -487,7 +487,7 @@ function ProfilePage() {
               fontWeight: 700,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
-              color: '#9CA3AF',
+              color: 'var(--text-muted)',
               marginBottom: '1rem',
             }}
           >
@@ -568,7 +568,7 @@ function ProfilePage() {
                   Minhas Anotações
                 </span>
               </div>
-              <ChevronRight size={16} strokeWidth={1.8} style={{ color: '#9CA3AF' }} />
+              <ChevronRight size={16} strokeWidth={1.8} style={{ color: 'var(--text-muted)' }} />
             </Link>
 
             {/* Highlights link */}
@@ -596,7 +596,7 @@ function ProfilePage() {
                   Meus Destaques
                 </span>
               </div>
-              <ChevronRight size={16} strokeWidth={1.8} style={{ color: '#9CA3AF' }} />
+              <ChevronRight size={16} strokeWidth={1.8} style={{ color: 'var(--text-muted)' }} />
             </Link>
 
             {/* Export data */}
@@ -624,7 +624,7 @@ function ProfilePage() {
                   Exportar Dados
                 </span>
               </div>
-              <ChevronRight size={16} strokeWidth={1.8} style={{ color: '#9CA3AF' }} />
+              <ChevronRight size={16} strokeWidth={1.8} style={{ color: 'var(--text-muted)' }} />
             </button>
           </div>
         </div>
@@ -644,7 +644,7 @@ function ProfilePage() {
               className="flex items-center justify-between py-2"
               style={i < arr.length - 1 ? { borderBottom: '1px solid var(--border-subtle)' } : {}}
             >
-              <span style={{ fontSize: '0.8rem', color: '#9CA3AF', fontWeight: 400 }}>{label}</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 400 }}>{label}</span>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 500 }}>{value}</span>
             </div>
           ))}

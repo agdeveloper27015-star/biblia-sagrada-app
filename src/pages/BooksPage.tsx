@@ -92,7 +92,7 @@ function BooksPage() {
     fontWeight: 700,
     letterSpacing: '0.14em',
     textTransform: 'uppercase',
-    color: '#9CA3AF',
+    color: 'var(--text-muted)',
   }
 
   // ── Render a book card ────────────────────────────────────────────────────
@@ -110,7 +110,7 @@ function BooksPage() {
       <span
         style={{
           ...sectionLabelStyle,
-          color: isActive ? 'rgba(255,255,255,0.5)' : '#9CA3AF',
+          color: isActive ? 'rgba(255,255,255,0.5)' : 'var(--text-muted)',
         }}
       >
         {getCategoryLabel(book)}
@@ -209,8 +209,8 @@ function BooksPage() {
                 style={{
                   fontSize: '0.8125rem',
                   fontWeight: isActive ? 700 : 500,
-                  color: isActive ? 'var(--text-primary)' : '#9CA3AF',
-                  borderBottom: isActive ? '2px solid var(--text-primary)' : 'none',
+                  color: isActive ? 'var(--accent)' : 'var(--text-muted)',
+                  borderBottom: isActive ? '2px solid var(--accent)' : 'none',
                   paddingBottom: isActive ? '2px' : '0',
                   textDecoration: 'none',
                   transition: 'color 0.15s',
@@ -267,7 +267,7 @@ function BooksPage() {
             paddingBottom: '0.875rem',
           }}
         >
-          <Search size={16} strokeWidth={1.5} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+          <Search size={16} strokeWidth={1.5} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
           <input
             type="text"
             placeholder="Buscar livro..."
@@ -286,7 +286,7 @@ function BooksPage() {
               onClick={() => setSearchQuery('')}
               className="transition-opacity active:opacity-50"
             >
-              <X size={15} strokeWidth={2} style={{ color: '#9CA3AF' }} />
+              <X size={15} strokeWidth={2} style={{ color: 'var(--text-muted)' }} />
             </button>
           )}
         </div>
@@ -306,7 +306,7 @@ function BooksPage() {
                     fontWeight: isActive ? 700 : 500,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
-                    color: isActive ? 'var(--text-primary)' : '#9CA3AF',
+                    color: isActive ? 'var(--accent)' : 'var(--text-muted)',
                   }}
                 >
                   {t === 'old' ? 'Antigo Testamento' : 'Novo Testamento'}
@@ -314,7 +314,7 @@ function BooksPage() {
                     <motion.div
                       layoutId="testament-tab-indicator"
                       className="absolute bottom-0 left-0 right-0"
-                      style={{ height: '2px', backgroundColor: 'var(--text-primary)' }}
+                      style={{ height: '2px', backgroundColor: 'var(--accent)' }}
                     />
                   )}
                 </button>
@@ -342,7 +342,7 @@ function BooksPage() {
               () => {},
             )}
             {displayOld.length === 0 && displayNew.length === 0 && (
-              <p style={{ fontSize: '0.9375rem', color: '#9CA3AF', textAlign: 'center', paddingTop: '2rem' }}>
+              <p style={{ fontSize: '0.9375rem', color: 'var(--text-muted)', textAlign: 'center', paddingTop: '2rem' }}>
                 Nenhum livro encontrado.
               </p>
             )}
@@ -372,8 +372,8 @@ function BooksPage() {
         <div
           className="fixed bottom-20 left-4 right-4 flex items-center justify-between rounded-2xl p-4"
           style={{
-            backgroundColor: 'rgba(208,224,229,0.3)',
-            border: '1px solid rgba(208,224,229,0.5)',
+            backgroundColor: 'rgba(255,140,66,0.12)',
+            border: '1px solid rgba(255,140,66,0.2)',
             backdropFilter: 'blur(8px)',
           }}
         >
@@ -384,7 +384,7 @@ function BooksPage() {
                 fontWeight: 700,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
-                color: '#9CA3AF',
+                color: 'var(--text-muted)',
                 display: 'block',
                 marginBottom: '0.2rem',
               }}
@@ -408,7 +408,7 @@ function BooksPage() {
             style={{
               width: '2.5rem',
               height: '2.5rem',
-              backgroundColor: 'var(--text-primary)',
+              backgroundColor: 'var(--accent)',
               flexShrink: 0,
             }}
           >

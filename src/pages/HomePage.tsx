@@ -119,8 +119,8 @@ function HomePage() {
                 style={{
                   fontSize: '0.8125rem',
                   fontWeight: isActive ? 700 : 500,
-                  color: isActive ? 'var(--text-primary)' : '#9CA3AF',
-                  borderBottom: isActive ? '2px solid var(--text-primary)' : 'none',
+                  color: isActive ? 'var(--accent)' : 'var(--text-muted)',
+                  borderBottom: isActive ? '2px solid var(--accent)' : 'none',
                   paddingBottom: isActive ? '2px' : '0',
                   textDecoration: 'none',
                   transition: 'color 0.15s',
@@ -180,7 +180,7 @@ function HomePage() {
             </div>
             <div
               className="rounded-xl p-5"
-              style={{ backgroundColor: 'rgba(208,224,229,0.3)', border: '1px solid rgba(208,224,229,0.5)' }}
+              style={{ backgroundColor: 'var(--accent-dim)', border: '1px solid rgba(255,140,66,0.2)' }}
             >
               <p style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'var(--text-primary)', lineHeight: 1.55 }}>
                 Nós vamos te ajudar a aprofundar seu entendimento da Palavra de Deus todos os dias.
@@ -211,10 +211,10 @@ function HomePage() {
                   style={{ width: '16rem', height: '8rem', backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
                 >
                   <div className="flex justify-between items-start">
-                    <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9CA3AF' }}>
+                    <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
                       Último Lido
                     </span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
                       <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
@@ -223,14 +223,14 @@ function HomePage() {
                       <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                         {lastRead.bookName} {lastRead.chapter}
                       </h3>
-                      <p style={{ fontSize: '0.8125rem', color: '#9CA3AF' }}>Continuar leitura</p>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Continuar leitura</p>
                     </button>
                   ) : (
                     <Link to="/books">
                       <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                         Gênesis 1:1
                       </h3>
-                      <p style={{ fontSize: '0.8125rem', color: '#9CA3AF' }}>Comece a ler</p>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Comece a ler</p>
                     </Link>
                   )}
                 </div>
@@ -245,18 +245,18 @@ function HomePage() {
                     onClick={() => navigate(`/read/${verseOfTheDay.book.id}/${verseOfTheDay.chapter}`)}
                   >
                     <div className="flex justify-between items-start">
-                      <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9CA3AF' }}>
+                      <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
                         Favorito
                       </span>
                       <button onClick={handleShare} className="transition-opacity active:opacity-50">
-                        <Share2 size={13} stroke="#9CA3AF" strokeWidth={1.5} />
+                        <Share2 size={13} stroke="var(--text-muted)" strokeWidth={1.5} />
                       </button>
                     </div>
                     <div>
                       <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                         {verseOfTheDay.book.name} {verseOfTheDay.chapter}:{verseOfTheDay.verse.verse}
                       </h3>
-                      <p style={{ fontSize: '0.8125rem', color: '#9CA3AF' }} className="line-clamp-1">
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }} className="line-clamp-1">
                         {copied ? 'Copiado!' : verseOfTheDay.verse.text}
                       </p>
                     </div>
@@ -274,7 +274,7 @@ function HomePage() {
                 className="flex flex-col justify-between rounded-2xl p-5"
                 style={{ height: '10rem', backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
               >
-                <span style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#9CA3AF', lineHeight: 1.3 }}>
+                <span style={{ fontSize: '0.8125rem', fontWeight: 500, color: 'var(--text-muted)', lineHeight: 1.3 }}>
                   Plano de<br />leitura
                 </span>
                 <span style={{ fontFamily: 'var(--font-sans)', fontSize: '3rem', fontWeight: 500, color: 'var(--text-primary)', lineHeight: 1 }}>
@@ -295,7 +295,7 @@ function HomePage() {
                 </div>
                 <div className="flex gap-1 mt-auto">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--text-primary)' }} />
-                  <div className="w-2 h-2 rounded-full border" style={{ borderColor: '#9CA3AF' }} />
+                  <div className="w-2 h-2 rounded-full border" style={{ borderColor: 'var(--text-muted)' }} />
                 </div>
                 <h3 style={{ fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-primary)', lineHeight: 1.3, marginTop: '0.5rem' }}>
                   Meus<br />Destaques
@@ -309,7 +309,7 @@ function HomePage() {
             <Link
               to="/books"
               className="relative flex flex-col justify-between rounded-2xl p-6 overflow-hidden"
-              style={{ backgroundColor: 'var(--text-primary)', minHeight: '9rem' }}
+              style={{ backgroundColor: 'var(--accent)', minHeight: '9rem' }}
             >
               {/* Decorative blur */}
               <div style={{ position: 'absolute', right: '-2.5rem', top: '-2.5rem', width: '8rem', height: '8rem', background: 'rgba(255,255,255,0.05)', borderRadius: '9999px', filter: 'blur(24px)' }} />
@@ -325,7 +325,7 @@ function HomePage() {
                     className="flex items-center justify-center rounded-full"
                     style={{ width: '3rem', height: '3rem', backgroundColor: '#ffffff' }}
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#17191C" strokeWidth="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--bg-page)" strokeWidth="2">
                       <path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
@@ -338,7 +338,7 @@ function HomePage() {
           {highlightTexts.length > 0 && (
             <motion.div variants={fadeUp}>
               <div className="flex items-center justify-between mb-3">
-                <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#9CA3AF' }}>
+                <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
                   Destaques Recentes
                 </span>
                 <Link to="/saved" style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-primary)' }}>
@@ -353,7 +353,7 @@ function HomePage() {
                     className="w-full text-left rounded-2xl p-4 transition-all active:scale-[0.98]"
                     style={{ backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
                   >
-                    <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9CA3AF', display: 'block', marginBottom: '0.35rem' }}>
+                    <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.35rem' }}>
                       {h.bookName} {h.chapter}:{h.verse}
                     </span>
                     <p style={{ fontSize: '0.9375rem', lineHeight: 1.55, color: 'var(--text-primary)', fontWeight: 400 }} className="line-clamp-2">

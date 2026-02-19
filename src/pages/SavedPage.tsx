@@ -39,8 +39,8 @@ function TopNav() {
     fontFamily: 'var(--font-sans)',
     fontSize: '0.8rem',
     fontWeight: isActive(path) ? 700 : 500,
-    color: isActive(path) ? 'var(--text-primary)' : '#9CA3AF',
-    borderBottom: isActive(path) ? '2px solid var(--text-primary)' : '2px solid transparent',
+    color: isActive(path) ? 'var(--accent)' : 'var(--text-muted)',
+    borderBottom: isActive(path) ? '2px solid var(--accent)' : '2px solid transparent',
     paddingBottom: '2px',
     textDecoration: 'none',
     transition: 'color 0.15s',
@@ -143,9 +143,9 @@ function FavoritesTab() {
       <Heart
         size={44}
         strokeWidth={1.2}
-        style={{ color: '#9CA3AF', opacity: 0.4, marginBottom: '1.25rem' }}
+        style={{ color: 'var(--text-muted)', opacity: 0.4, marginBottom: '1.25rem' }}
       />
-      <p style={{ fontSize: '0.9375rem', color: '#9CA3AF', fontWeight: 400, textAlign: 'center', lineHeight: 1.65 }}>
+      <p style={{ fontSize: '0.9375rem', color: 'var(--text-muted)', fontWeight: 400, textAlign: 'center', lineHeight: 1.65 }}>
         Toque em um versículo durante a leitura para salvar nos favoritos
       </p>
     </motion.div>
@@ -169,8 +169,8 @@ function FavoritesTab() {
               fontWeight: 700,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              backgroundColor: activeTab === key ? 'var(--text-primary)' : 'var(--bg-card)',
-              color: activeTab === key ? '#FFFFFF' : '#9CA3AF',
+              backgroundColor: activeTab === key ? 'var(--accent)' : 'var(--bg-card)',
+              color: activeTab === key ? '#FFFFFF' : 'var(--text-muted)',
               boxShadow: '0 2px 8px rgba(23,25,28,0.06)',
             }}
           >
@@ -216,7 +216,7 @@ function FavoritesTab() {
                       fontWeight: 700,
                       letterSpacing: '0.14em',
                       textTransform: 'uppercase',
-                      color: '#9CA3AF',
+                      color: 'var(--text-muted)',
                       marginBottom: '0.4rem',
                     }}
                   >
@@ -238,7 +238,7 @@ function FavoritesTab() {
                 <button
                   onClick={(e) => handleRemove(fav.book, fav.chapter, fav.verse, e)}
                   className="shrink-0 p-1.5 transition-opacity active:opacity-50 mt-0.5"
-                  style={{ color: '#9CA3AF' }}
+                  style={{ color: 'var(--text-muted)' }}
                 >
                   <Trash2 size={15} strokeWidth={1.6} />
                 </button>
@@ -263,7 +263,7 @@ function FavoritesTab() {
                       fontWeight: 700,
                       letterSpacing: '0.14em',
                       textTransform: 'uppercase',
-                      color: '#9CA3AF',
+                      color: 'var(--text-muted)',
                     }}
                   >
                     {group.book.name}
@@ -271,7 +271,7 @@ function FavoritesTab() {
                   <span
                     style={{
                       fontSize: '0.6rem',
-                      color: '#9CA3AF',
+                      color: 'var(--text-muted)',
                       fontWeight: 400,
                     }}
                   >
@@ -301,7 +301,7 @@ function FavoritesTab() {
                           fontWeight: 700,
                           letterSpacing: '0.14em',
                           textTransform: 'uppercase',
-                          color: '#9CA3AF',
+                          color: 'var(--text-muted)',
                           marginBottom: '0.35rem',
                         }}
                       >
@@ -323,7 +323,7 @@ function FavoritesTab() {
                     <button
                       onClick={(e) => handleRemove(fav.book, fav.chapter, fav.verse, e)}
                       className="shrink-0 p-1.5 transition-opacity active:opacity-50 mt-0.5"
-                      style={{ color: '#9CA3AF' }}
+                      style={{ color: 'var(--text-muted)' }}
                     >
                       <Trash2 size={15} strokeWidth={1.6} />
                     </button>
@@ -368,9 +368,9 @@ function NotesTab() {
       <StickyNote
         size={44}
         strokeWidth={1.2}
-        style={{ color: '#9CA3AF', opacity: 0.4, marginBottom: '1.25rem' }}
+        style={{ color: 'var(--text-muted)', opacity: 0.4, marginBottom: '1.25rem' }}
       />
-      <p style={{ fontSize: '0.9375rem', color: '#9CA3AF', fontWeight: 400, textAlign: 'center', lineHeight: 1.65 }}>
+      <p style={{ fontSize: '0.9375rem', color: 'var(--text-muted)', fontWeight: 400, textAlign: 'center', lineHeight: 1.65 }}>
         Clique em um versículo durante a leitura para adicionar anotações
       </p>
     </motion.div>
@@ -383,7 +383,7 @@ function NotesTab() {
         className="input-card flex items-center gap-3 px-4 py-3 mb-1"
         style={{ borderRadius: '0.875rem' }}
       >
-        <Search size={15} strokeWidth={1.8} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+        <Search size={15} strokeWidth={1.8} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
         <input
           type="text"
           value={searchQuery}
@@ -409,13 +409,13 @@ function NotesTab() {
               backgroundColor: 'var(--bg-secondary)',
             }}
           >
-            <X size={11} style={{ color: '#9CA3AF' }} />
+            <X size={11} style={{ color: 'var(--text-muted)' }} />
           </button>
         )}
       </div>
 
       {filteredNotes.length === 0 && searchQuery ? (
-        <p style={{ fontSize: '0.875rem', color: '#9CA3AF', fontWeight: 400, textAlign: 'center', paddingTop: '2rem' }}>
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 400, textAlign: 'center', paddingTop: '2rem' }}>
           Nenhuma anotação para &ldquo;{searchQuery}&rdquo;
         </p>
       ) : (
@@ -452,14 +452,14 @@ function NotesTab() {
                         fontWeight: 700,
                         letterSpacing: '0.14em',
                         textTransform: 'uppercase',
-                        color: '#9CA3AF',
+                        color: 'var(--text-muted)',
                       }}
                     >
                       {book?.name} {note.chapter}:{note.verse}
                     </span>
                     <span
                       className="flex items-center gap-1"
-                      style={{ fontSize: '0.6rem', color: '#9CA3AF', fontWeight: 400 }}
+                      style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 400 }}
                     >
                       <Calendar size={9} strokeWidth={1.5} />
                       {formatDate(note.updated_at || note.created_at)}
@@ -497,7 +497,7 @@ function NotesTab() {
                     style={{
                       fontSize: '0.875rem',
                       lineHeight: 1.6,
-                      color: '#9CA3AF',
+                      color: 'var(--text-muted)',
                       fontWeight: 400,
                     }}
                     className="line-clamp-2"
@@ -508,7 +508,7 @@ function NotesTab() {
 
                 {/* Footer: arrow */}
                 <div className="flex items-center justify-end mt-2">
-                  <ChevronRight size={15} strokeWidth={1.8} style={{ color: '#9CA3AF' }} />
+                  <ChevronRight size={15} strokeWidth={1.8} style={{ color: 'var(--text-muted)' }} />
                 </div>
               </motion.div>
             )
@@ -575,7 +575,7 @@ function SavedPage() {
             >
               {pageTitle}
             </h1>
-            <p style={{ fontSize: '0.875rem', color: '#9CA3AF', fontWeight: 400 }}>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 400 }}>
               {itemCount === 0
                 ? 'Nenhum item salvo'
                 : `${itemCount} ${itemCount === 1 ? 'item' : 'itens'}`}
@@ -604,9 +604,9 @@ function SavedPage() {
                 fontWeight: 700,
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                color: activeTab === key ? 'var(--text-primary)' : '#9CA3AF',
+                color: activeTab === key ? 'var(--accent)' : 'var(--text-muted)',
                 borderBottom: activeTab === key
-                  ? '2px solid var(--text-primary)'
+                  ? '2px solid var(--accent)'
                   : '2px solid transparent',
               }}
             >
@@ -616,7 +616,7 @@ function SavedPage() {
                   className="ml-1.5"
                   style={{
                     fontSize: '0.6rem',
-                    color: activeTab === key ? 'var(--text-primary)' : '#9CA3AF',
+                    color: activeTab === key ? 'var(--accent)' : 'var(--text-muted)',
                     fontWeight: 500,
                   }}
                 >

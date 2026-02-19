@@ -366,6 +366,7 @@ function ReadPage() {
         onClose={() => setShowBookSelector(false)}
         onSelect={(bookId, chapter) => { setShowBookSelector(false); navigateToChapter(bookId, chapter) }}
         currentBookId={currentBookId}
+        currentChapter={currentChapterNum}
       />
 
       <ReadingSettingsPanel

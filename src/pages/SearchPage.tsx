@@ -38,8 +38,8 @@ function TopNav() {
     fontFamily: 'var(--font-sans)',
     fontSize: '0.8rem',
     fontWeight: isActive(path) ? 700 : 500,
-    color: isActive(path) ? 'var(--text-primary)' : '#9CA3AF',
-    borderBottom: isActive(path) ? '2px solid var(--text-primary)' : '2px solid transparent',
+    color: isActive(path) ? 'var(--accent)' : 'var(--text-muted)',
+    borderBottom: isActive(path) ? '2px solid var(--accent)' : '2px solid transparent',
     paddingBottom: '2px',
     textDecoration: 'none',
     transition: 'color 0.15s',
@@ -210,7 +210,7 @@ function SearchPage() {
           <Search
             size={17}
             strokeWidth={1.8}
-            style={{ color: '#9CA3AF', flexShrink: 0 }}
+            style={{ color: 'var(--text-muted)', flexShrink: 0 }}
           />
           <input
             ref={inputRef}
@@ -261,7 +261,7 @@ function SearchPage() {
               <Loader2
                 size={28}
                 className="animate-spin"
-                style={{ color: '#9CA3AF' }}
+                style={{ color: 'var(--text-muted)' }}
               />
             </motion.div>
           )}
@@ -283,7 +283,7 @@ function SearchPage() {
                   fontWeight: 700,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  color: '#9CA3AF',
+                  color: 'var(--text-muted)',
                   marginBottom: '0.25rem',
                 }}
               >
@@ -297,12 +297,12 @@ function SearchPage() {
                   <Search
                     size={40}
                     strokeWidth={1.2}
-                    style={{ color: '#9CA3AF', marginBottom: '1rem', opacity: 0.5 }}
+                    style={{ color: 'var(--text-muted)', marginBottom: '1rem', opacity: 0.5 }}
                   />
                   <p
                     style={{
                       fontSize: '0.9375rem',
-                      color: '#9CA3AF',
+                      color: 'var(--text-muted)',
                       fontWeight: 400,
                       textAlign: 'center',
                       lineHeight: 1.6,
@@ -334,7 +334,7 @@ function SearchPage() {
                         fontWeight: 700,
                         letterSpacing: '0.14em',
                         textTransform: 'uppercase',
-                        color: '#9CA3AF',
+                        color: 'var(--text-muted)',
                         marginBottom: '0.4rem',
                       }}
                     >
@@ -376,7 +376,7 @@ function SearchPage() {
                     fontWeight: 700,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
-                    color: '#9CA3AF',
+                    color: 'var(--text-muted)',
                   }}
                 >
                   Buscas Recentes
@@ -386,7 +386,7 @@ function SearchPage() {
                   className="transition-opacity active:opacity-50"
                   style={{
                     fontSize: '0.75rem',
-                    color: '#9CA3AF',
+                    color: 'var(--text-muted)',
                     fontWeight: 500,
                     fontFamily: 'var(--font-sans)',
                   }}
@@ -415,7 +415,7 @@ function SearchPage() {
                     <Clock
                       size={15}
                       strokeWidth={1.6}
-                      style={{ color: '#9CA3AF', flexShrink: 0 }}
+                      style={{ color: 'var(--text-muted)', flexShrink: 0 }}
                     />
                     <button
                       className="flex-1 text-left transition-opacity active:opacity-70"
@@ -439,7 +439,7 @@ function SearchPage() {
                         backgroundColor: 'var(--bg-secondary)',
                       }}
                     >
-                      <X size={11} style={{ color: '#9CA3AF' }} />
+                      <X size={11} style={{ color: 'var(--text-muted)' }} />
                     </button>
                   </motion.div>
                 ))}
@@ -459,12 +459,12 @@ function SearchPage() {
               <Search
                 size={48}
                 strokeWidth={1.2}
-                style={{ color: '#9CA3AF', marginBottom: '1.25rem', opacity: 0.4 }}
+                style={{ color: 'var(--text-muted)', marginBottom: '1.25rem', opacity: 0.4 }}
               />
               <p
                 style={{
                   fontSize: '0.9375rem',
-                  color: '#9CA3AF',
+                  color: 'var(--text-muted)',
                   fontWeight: 400,
                   textAlign: 'center',
                   lineHeight: 1.7,

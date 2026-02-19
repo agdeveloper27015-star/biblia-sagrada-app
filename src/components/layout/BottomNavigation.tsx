@@ -34,7 +34,7 @@ export function BottomNavigation() {
                   style={{
                     width: '2.25rem',
                     height: '2.25rem',
-                    backgroundColor: isActive ? 'var(--text-primary)' : 'transparent',
+                    backgroundColor: isActive ? 'var(--accent)' : 'transparent',
                   }}
                 >
                   <Icon
@@ -50,7 +50,7 @@ export function BottomNavigation() {
                     fontWeight: isActive ? 700 : 400,
                     letterSpacing: '0.06em',
                     textTransform: 'uppercase',
-                    color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                    color: isActive ? 'var(--accent)' : 'var(--text-muted)',
                     transition: 'color 0.15s',
                   }}
                 >

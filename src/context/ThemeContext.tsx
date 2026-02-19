@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
-type Theme = 'light' | 'dark'
+// "dark" é o tema padrão (paleta da gaveta). "light" é o tema claro.
+type Theme = 'dark' | 'light'
 
 interface ThemeContextValue {
   theme: Theme
@@ -13,15 +14,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem('biblia_theme')
     if (stored === 'dark' || stored === 'light') return stored
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    // padrão: escuro
+    return 'dark'
   })
 
   useEffect(() => {
+    // Escuro = sem classe (padrão :root). Claro = classe .light
+    document.documentElement.classList.toggle('light', theme === 'light')
     document.documentElement.classList.toggle('dark', theme === 'dark')
     localStorage.setItem('biblia_theme', theme)
   }, [theme])
 
-  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'))
+  const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

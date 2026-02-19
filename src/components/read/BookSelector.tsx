@@ -1,8 +1,7 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, ArrowLeft, X, BookOpen } from 'lucide-react'
-import { cn } from '../../lib/cn'
-import { books, getBooksByTestament } from '../../data/books'
+import { X, ChevronRight } from 'lucide-react'
+import { books } from '../../data/books'
 import type { Book } from '../../types/bible'
 
 interface BookSelectorProps {
@@ -10,29 +9,57 @@ interface BookSelectorProps {
   onClose: () => void
   onSelect: (bookId: number, chapter: number) => void
   currentBookId?: number
+  currentChapter?: number
 }
 
-type Testament = 'old' | 'new'
+// ── Accent color (Biblely-style orange) ──────────────────────────────────────
+const ACCENT = '#FF8C42'
 
-export function BookSelector({ isOpen, onClose, onSelect, currentBookId }: BookSelectorProps) {
-  const [activeTestament, setActiveTestament] = useState<Testament>('old')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null)
-  const searchInputRef = useRef<HTMLInputElement>(null)
+// ── Category label helper ─────────────────────────────────────────────────────
+function getCategoryLabel(book: Book): string {
+  const id = book.id
+  if (book.testament === 'old') {
+    if (id <= 5)  return 'Pentateuco'
+    if (id <= 17) return 'Históricos'
+    if (id <= 22) return 'Poéticos'
+    return 'Proféticos'
+  }
+  if (id <= 43) return 'Evangelhos'
+  if (id === 44) return 'História'
+  if (id <= 58) return 'Epístolas'
+  if (id <= 65) return 'Epístolas Gerais'
+  return 'Profecia'
+}
+
+export function BookSelector({
+  isOpen,
+  onClose,
+  onSelect,
+  currentBookId,
+  currentChapter,
+}: BookSelectorProps) {
+  const [selectedBookId, setSelectedBookId] = useState<number>(currentBookId ?? 1)
+
+  const selectedBook = useMemo(
+    () => books.find((b) => b.id === selectedBookId) ?? books[0]!,
+    [selectedBookId],
+  )
+
+  const chapterNumbers = useMemo(
+    () => Array.from({ length: selectedBook.chapters }, (_, i) => i + 1),
+    [selectedBook],
+  )
+
+  // Refs for scrolling into view
+  const bookListRef = useRef<HTMLDivElement>(null)
   const chapterGridRef = useRef<HTMLDivElement>(null)
+  const activeBookRef = useRef<HTMLButtonElement>(null)
+  const activeChapterRef = useRef<HTMLButtonElement>(null)
 
-  // Reset state when modal opens
+  // Reset selected book when opening
   useEffect(() => {
     if (isOpen) {
-      setSearchQuery('')
-      setSelectedBook(null)
-      // Determine which testament the current book belongs to
-      if (currentBookId) {
-        const currentBook = books.find((b) => b.id === currentBookId)
-        if (currentBook) {
-          setActiveTestament(currentBook.testament)
-        }
-      }
+      setSelectedBookId(currentBookId ?? 1)
       document.body.style.overflow = 'hidden'
     }
     return () => {
@@ -40,20 +67,26 @@ export function BookSelector({ isOpen, onClose, onSelect, currentBookId }: BookS
     }
   }, [isOpen, currentBookId])
 
-  const oldTestamentBooks = useMemo(() => getBooksByTestament('old'), [])
-  const newTestamentBooks = useMemo(() => getBooksByTestament('new'), [])
+  // Scroll active book into view on open or when book changes
+  useEffect(() => {
+    if (!isOpen) return
+    const t = setTimeout(() => {
+      activeBookRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    }, 120)
+    return () => clearTimeout(t)
+  }, [isOpen, selectedBookId])
 
-  const filteredBooks = useMemo(() => {
-    const query = searchQuery.toLowerCase().trim()
-    if (!query) {
-      return activeTestament === 'old' ? oldTestamentBooks : newTestamentBooks
-    }
-    return books.filter(
-      (book) =>
-        book.name.toLowerCase().includes(query) ||
-        book.abbreviation.toLowerCase().includes(query)
-    )
-  }, [searchQuery, activeTestament, oldTestamentBooks, newTestamentBooks])
+  // Scroll active chapter into view when book changes
+  useEffect(() => {
+    if (!isOpen) return
+    const t = setTimeout(() => {
+      chapterGridRef.current?.scrollTo({ top: 0, behavior: 'instant' })
+      if (selectedBookId === currentBookId) {
+        activeChapterRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      }
+    }, 80)
+    return () => clearTimeout(t)
+  }, [isOpen, selectedBookId, currentBookId])
 
   const handleBookClick = useCallback((book: Book) => {
     if (book.chapters === 1) {
@@ -61,281 +94,201 @@ export function BookSelector({ isOpen, onClose, onSelect, currentBookId }: BookS
       onClose()
       return
     }
-    setSelectedBook(book)
+    setSelectedBookId(book.id)
   }, [onSelect, onClose])
 
   const handleChapterClick = useCallback(
     (chapter: number) => {
-      if (selectedBook) {
-        onSelect(selectedBook.id, chapter)
-        onClose()
-      }
+      onSelect(selectedBook.id, chapter)
+      onClose()
     },
-    [selectedBook, onSelect, onClose]
+    [selectedBook, onSelect, onClose],
   )
-
-  const handleBack = useCallback(() => {
-    setSelectedBook(null)
-  }, [])
-
-  const handleClose = useCallback(() => {
-    setSelectedBook(null)
-    setSearchQuery('')
-    onClose()
-  }, [onClose])
-
-  const chapterNumbers = useMemo(() => {
-    if (!selectedBook) return []
-    return Array.from({ length: selectedBook.chapters }, (_, i) => i + 1)
-  }, [selectedBook])
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-[100] flex flex-col"
-          style={{ backgroundColor: 'var(--bg-primary)' }}
-          initial={{ opacity: 0, y: '100%' }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: '100%' }}
-          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-        >
-          {/* Header */}
-          <div
-            className="flex items-center gap-3 px-4 py-3 border-b shrink-0"
-            style={{ borderColor: 'var(--border-subtle)' }}
+        <>
+          {/* Backdrop */}
+          <motion.div
+            className="fixed inset-0 z-[90]"
+            style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+
+          {/* Drawer panel */}
+          <motion.div
+            className="fixed inset-x-0 bottom-0 z-[100] flex flex-col"
+            style={{
+              height: '82dvh',
+              backgroundColor: '#1C1C1E',
+              borderRadius: '1.5rem 1.5rem 0 0',
+            }}
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 260 }}
           >
-            {selectedBook ? (
-              <button
-                onClick={handleBack}
-                className="p-2 -ml-2 rounded-full transition-colors hover:bg-[var(--bg-secondary)]"
-                aria-label="Voltar"
-              >
-                <ArrowLeft size={22} style={{ color: 'var(--text-primary)' }} />
-              </button>
-            ) : (
-              <BookOpen size={22} style={{ color: 'var(--color-secondary)' }} />
-            )}
+            {/* ── Handle + Header ─────────────────────────────── */}
+            <div className="shrink-0 px-5 pt-3 pb-4">
+              {/* Drag handle */}
+              <div
+                className="mx-auto mb-4 rounded-full"
+                style={{ width: 36, height: 4, backgroundColor: 'rgba(255,255,255,0.2)' }}
+              />
 
-            <h2
-              className="text-lg font-semibold flex-1"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              {selectedBook ? selectedBook.name : 'Selecionar livro'}
-            </h2>
-
-            <button
-              onClick={handleClose}
-              className="p-2 -mr-2 rounded-full transition-colors hover:bg-[var(--bg-secondary)]"
-              aria-label="Fechar"
-            >
-              <X size={22} style={{ color: 'var(--text-secondary)' }} />
-            </button>
-          </div>
-
-          <AnimatePresence mode="wait">
-            {selectedBook ? (
-              /* Chapter Grid */
-              <motion.div
-                key="chapters"
-                className="flex-1 overflow-y-auto"
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -40 }}
-                transition={{ duration: 0.2 }}
-                ref={chapterGridRef}
-              >
-                <div className="px-4 py-3">
-                  <p
-                    className="text-sm mb-4"
-                    style={{ color: 'var(--text-secondary)' }}
+              {/* Current selection indicator */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {/* Active book pill */}
+                  <span
+                    className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold"
+                    style={{ backgroundColor: ACCENT, color: '#fff', fontSize: '0.8125rem' }}
                   >
-                    Selecione o capítulo
-                  </p>
-                  <div className="grid grid-cols-6 gap-2">
-                    {chapterNumbers.map((chapter) => (
-                      <button
-                        key={chapter}
-                        onClick={() => handleChapterClick(chapter)}
-                        className={cn(
-                          'aspect-square flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-150',
-                          'hover:scale-105 active:scale-95'
-                        )}
+                    {selectedBook.abbreviation}
+                    <span style={{ fontFamily: 'var(--font-serif)', fontWeight: 400, fontSize: '0.75rem' }}>
+                      {selectedBook.name}
+                    </span>
+                    <ChevronRight size={13} strokeWidth={2.5} />
+                  </span>
+                </div>
+
+                <button
+                  onClick={onClose}
+                  className="flex items-center justify-center rounded-full transition-opacity active:opacity-50"
+                  style={{
+                    width: 32,
+                    height: 32,
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                  }}
+                >
+                  <X size={16} strokeWidth={2} style={{ color: 'rgba(255,255,255,0.7)' }} />
+                </button>
+              </div>
+            </div>
+
+            {/* ── Split Panel ──────────────────────────────────── */}
+            <div className="flex flex-1 min-h-0">
+
+              {/* Left: Book abbreviation list */}
+              <div
+                ref={bookListRef}
+                className="overflow-y-auto shrink-0"
+                style={{
+                  width: 68,
+                  borderRight: '1px solid rgba(255,255,255,0.06)',
+                }}
+              >
+                {books.map((book) => {
+                  const isActive = book.id === selectedBookId
+
+                  return (
+                    <button
+                      key={book.id}
+                      ref={isActive ? activeBookRef : undefined}
+                      onClick={() => handleBookClick(book)}
+                      className="w-full flex flex-col items-center justify-center py-2.5 transition-colors"
+                      style={{
+                        backgroundColor: isActive ? `${ACCENT}22` : 'transparent',
+                        borderLeft: isActive ? `3px solid ${ACCENT}` : '3px solid transparent',
+                        minHeight: 48,
+                      }}
+                    >
+                      <span
                         style={{
-                          backgroundColor: 'var(--bg-secondary)',
-                          color: 'var(--text-primary)',
+                          fontSize: '0.7rem',
+                          fontWeight: isActive ? 700 : 500,
+                          color: isActive ? ACCENT : 'rgba(255,255,255,0.45)',
+                          lineHeight: 1.2,
+                          letterSpacing: '0.03em',
+                          textAlign: 'center',
+                          maxWidth: 56,
+                          wordBreak: 'break-all',
                         }}
                       >
-                        {chapter}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
-              /* Book List */
-              <motion.div
-                key="books"
-                className="flex-1 flex flex-col overflow-hidden"
-                initial={{ opacity: 0, x: -40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 40 }}
-                transition={{ duration: 0.2 }}
+                        {book.abbreviation}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Right: Chapter grid */}
+              <div
+                ref={chapterGridRef}
+                className="flex-1 overflow-y-auto px-4 pt-3 pb-8"
               >
-                {/* Search Bar */}
-                <div className="px-4 pt-3 pb-2 shrink-0">
-                  <div
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl"
-                    style={{ backgroundColor: 'var(--bg-secondary)' }}
+                {/* Book name heading */}
+                <div className="mb-4">
+                  <p
+                    style={{
+                      fontSize: '0.6rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.16em',
+                      textTransform: 'uppercase',
+                      color: 'rgba(255,255,255,0.3)',
+                      marginBottom: '0.2rem',
+                    }}
                   >
-                    <Search size={18} style={{ color: 'var(--text-muted)' }} />
-                    <input
-                      ref={searchInputRef}
-                      type="text"
-                      placeholder="Buscar livro..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
-                      style={{ color: 'var(--text-primary)' }}
-                    />
-                    {searchQuery && (
+                    {getCategoryLabel(selectedBook)}
+                  </p>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: '1.5rem',
+                      fontWeight: 600,
+                      color: '#ffffff',
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    {selectedBook.name}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'rgba(255,255,255,0.35)',
+                      marginTop: '0.25rem',
+                    }}
+                  >
+                    {selectedBook.chapters} {selectedBook.chapters === 1 ? 'capítulo' : 'capítulos'}
+                  </p>
+                </div>
+
+                {/* Chapter grid */}
+                <div
+                  className="grid gap-2.5"
+                  style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}
+                >
+                  {chapterNumbers.map((chapter) => {
+                    const isCurrent =
+                      selectedBook.id === currentBookId && chapter === currentChapter
+
+                    return (
                       <button
-                        onClick={() => setSearchQuery('')}
-                        className="p-0.5 rounded-full hover:bg-[var(--bg-tertiary)]"
+                        key={chapter}
+                        ref={isCurrent ? activeChapterRef : undefined}
+                        onClick={() => handleChapterClick(chapter)}
+                        className="aspect-square flex items-center justify-center rounded-2xl transition-transform active:scale-90"
+                        style={{
+                          backgroundColor: isCurrent ? ACCENT : 'rgba(255,255,255,0.08)',
+                          color: isCurrent ? '#ffffff' : 'rgba(255,255,255,0.7)',
+                          fontSize: '0.875rem',
+                          fontWeight: isCurrent ? 700 : 400,
+                          boxShadow: isCurrent ? `0 4px 12px ${ACCENT}55` : 'none',
+                        }}
                       >
-                        <X size={16} style={{ color: 'var(--text-muted)' }} />
+                        {String(chapter).padStart(2, '0')}
                       </button>
-                    )}
-                  </div>
+                    )
+                  })}
                 </div>
-
-                {/* Testament Tabs */}
-                {!searchQuery && (
-                  <div
-                    className="flex px-4 gap-1 shrink-0 border-b"
-                    style={{ borderColor: 'var(--border-subtle)' }}
-                  >
-                    <button
-                      onClick={() => setActiveTestament('old')}
-                      className={cn(
-                        'flex-1 py-2.5 text-sm font-medium rounded-t-lg transition-colors relative'
-                      )}
-                      style={{
-                        color:
-                          activeTestament === 'old'
-                            ? 'var(--color-secondary)'
-                            : 'var(--text-muted)',
-                      }}
-                    >
-                      Antigo Testamento
-                      {activeTestament === 'old' && (
-                        <motion.div
-                          layoutId="testament-tab"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                          style={{ backgroundColor: 'var(--color-secondary)' }}
-                        />
-                      )}
-                    </button>
-                    <button
-                      onClick={() => setActiveTestament('new')}
-                      className={cn(
-                        'flex-1 py-2.5 text-sm font-medium rounded-t-lg transition-colors relative'
-                      )}
-                      style={{
-                        color:
-                          activeTestament === 'new'
-                            ? 'var(--color-secondary)'
-                            : 'var(--text-muted)',
-                      }}
-                    >
-                      Novo Testamento
-                      {activeTestament === 'new' && (
-                        <motion.div
-                          layoutId="testament-tab"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                          style={{ backgroundColor: 'var(--color-secondary)' }}
-                        />
-                      )}
-                    </button>
-                  </div>
-                )}
-
-                {/* Book List */}
-                <div className="flex-1 overflow-y-auto">
-                  {filteredBooks.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-12 px-4">
-                      <Search
-                        size={40}
-                        style={{ color: 'var(--text-muted)' }}
-                        className="mb-3"
-                      />
-                      <p
-                        className="text-sm text-center"
-                        style={{ color: 'var(--text-muted)' }}
-                      >
-                        Nenhum livro encontrado para &ldquo;{searchQuery}&rdquo;
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="px-4 py-2">
-                      {filteredBooks.map((book) => (
-                        <button
-                          key={book.id}
-                          onClick={() => handleBookClick(book)}
-                          className={cn(
-                            'w-full flex items-center justify-between px-3 py-3 rounded-xl transition-colors',
-                            'hover:bg-[var(--bg-secondary)] active:bg-[var(--bg-tertiary)]',
-                            currentBookId === book.id && 'bg-[var(--bg-secondary)]'
-                          )}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span
-                              className={cn(
-                                'w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold shrink-0'
-                              )}
-                              style={{
-                                backgroundColor:
-                                  currentBookId === book.id
-                                    ? 'var(--color-secondary)'
-                                    : 'var(--bg-tertiary)',
-                                color:
-                                  currentBookId === book.id
-                                    ? '#fff'
-                                    : 'var(--text-secondary)',
-                              }}
-                            >
-                              {book.abbreviation}
-                            </span>
-                            <div className="text-left">
-                              <p
-                                className="text-sm font-medium"
-                                style={{ color: 'var(--text-primary)' }}
-                              >
-                                {book.name}
-                              </p>
-                              <p
-                                className="text-xs"
-                                style={{ color: 'var(--text-muted)' }}
-                              >
-                                {book.chapters}{' '}
-                                {book.chapters === 1 ? 'capítulo' : 'capítulos'}
-                              </p>
-                            </div>
-                          </div>
-                          <ArrowLeft
-                            size={16}
-                            className="rotate-180"
-                            style={{ color: 'var(--text-muted)' }}
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   )

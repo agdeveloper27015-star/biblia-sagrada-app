@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Search, X, Loader2, Clock } from 'lucide-react'
 import { searchBible } from '../data/bible'
@@ -20,12 +20,73 @@ function highlightMatch(text: string, query: string): React.ReactNode {
       {before}
       <mark
         className="rounded-sm"
-        style={{ backgroundColor: 'var(--sage-light)', color: 'var(--text-primary)', fontWeight: 600 }}
+        style={{ backgroundColor: 'rgba(23,25,28,0.12)', color: 'var(--text-primary)', fontWeight: 600 }}
       >
         {match}
       </mark>
       {after}
     </>
+  )
+}
+
+// ── Top Nav ──────────────────────────────────────────────────────
+function TopNav() {
+  const location = useLocation()
+  const isActive = (path: string) => location.pathname === path
+
+  const navLinkStyle = (path: string): React.CSSProperties => ({
+    fontFamily: 'var(--font-sans)',
+    fontSize: '0.8rem',
+    fontWeight: isActive(path) ? 700 : 500,
+    color: isActive(path) ? 'var(--text-primary)' : '#9CA3AF',
+    borderBottom: isActive(path) ? '2px solid var(--text-primary)' : '2px solid transparent',
+    paddingBottom: '2px',
+    textDecoration: 'none',
+    transition: 'color 0.15s',
+  })
+
+  return (
+    <nav
+      className="flex items-center justify-between px-5 py-3 shrink-0"
+      style={{ backgroundColor: 'var(--bg-page)' }}
+    >
+      {/* Left: Wave logo */}
+      <div style={{ color: 'var(--text-primary)' }}>
+        <svg width="32" height="14" viewBox="0 0 32 14" fill="none">
+          <path
+            d="M1 8.5C5.5 8.5 7.5 4.5 9 1.5C10.5 -1.5 14 1 16 5C18 9 20 12.5 24 12.5C28 12.5 31 10 31 10"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeWidth="2"
+          />
+        </svg>
+      </div>
+
+      {/* Center: nav links */}
+      <div className="flex items-center gap-5">
+        <Link to="/" style={navLinkStyle('/')}>Início</Link>
+        <Link to="/books" style={navLinkStyle('/books')}>Bíblia</Link>
+        <Link to="/profile" style={navLinkStyle('/profile')}>Config.</Link>
+      </div>
+
+      {/* Right: avatar */}
+      <button
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          backgroundColor: 'var(--bg-card)',
+          border: '1.5px solid var(--border-medium)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: 'var(--shadow-sm)',
+          flexShrink: 0,
+        }}
+      >
+        <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-muted)' }}>U</span>
+      </button>
+    </nav>
   )
 }
 
@@ -120,33 +181,37 @@ function SearchPage() {
   const showHistory = !hasSearched && !isSearching && history.length > 0
 
   return (
-    <div className="fixed inset-0 flex flex-col" style={{ backgroundColor: 'var(--bg-primary)' }}>
-      {/* Header */}
-      <div
-        className="px-5 pt-10 pb-4 shrink-0"
-        style={{ borderBottom: '1px solid var(--border-subtle)' }}
-      >
-        <h1 style={{
-          fontFamily: 'var(--font-sans)',
-          fontSize: '1rem',
-          fontWeight: 200,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: 'var(--text-primary)',
-          marginBottom: '0.875rem',
-        }}>
+    <div
+      className="min-h-dvh pb-28 flex flex-col"
+      style={{ backgroundColor: 'var(--bg-page)' }}
+    >
+      <TopNav />
+
+      {/* Page title + search input */}
+      <div className="px-5 pt-4 pb-5 shrink-0">
+        <h1
+          style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: '3rem',
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            lineHeight: 1.1,
+            marginBottom: '1.25rem',
+          }}
+        >
           Buscar
         </h1>
 
-        {/* Search input */}
+        {/* Search input card */}
         <div
-          className="flex items-center gap-2 px-3 py-2.5 rounded-lg"
-          style={{
-            backgroundColor: 'var(--bg-secondary)',
-            border: '1px solid var(--border-subtle)',
-          }}
+          className="input-card flex items-center gap-3 px-4 py-3.5"
+          style={{ borderRadius: '1.25rem' }}
         >
-          <Search size={15} strokeWidth={1.4} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+          <Search
+            size={17}
+            strokeWidth={1.8}
+            style={{ color: '#9CA3AF', flexShrink: 0 }}
+          />
           <input
             ref={inputRef}
             type="text"
@@ -154,21 +219,35 @@ function SearchPage() {
             onChange={(e) => handleQueryChange(e.target.value)}
             placeholder="Buscar na Bíblia..."
             className="flex-1 bg-transparent outline-none"
-            style={{ color: 'var(--text-primary)', fontSize: '0.875rem', fontWeight: 300 }}
+            style={{
+              color: 'var(--text-primary)',
+              fontSize: '0.9375rem',
+              fontWeight: 400,
+              fontFamily: 'var(--font-sans)',
+            }}
             autoComplete="off"
             autoCorrect="off"
             spellCheck={false}
           />
           {query && (
-            <button onClick={handleClear} className="shrink-0 transition-opacity active:opacity-50">
-              <X size={14} style={{ color: 'var(--text-muted)' }} />
+            <button
+              onClick={handleClear}
+              className="shrink-0 transition-opacity active:opacity-50 flex items-center justify-center"
+              style={{
+                width: 22,
+                height: 22,
+                borderRadius: '50%',
+                backgroundColor: 'var(--bg-secondary)',
+              }}
+            >
+              <X size={12} style={{ color: 'var(--text-muted)' }} />
             </button>
           )}
         </div>
       </div>
 
       {/* Content area */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 px-5">
         <AnimatePresence mode="wait">
           {/* Loading */}
           {isSearching && (
@@ -177,9 +256,13 @@ function SearchPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center justify-center py-16"
+              className="flex items-center justify-center py-20"
             >
-              <Loader2 size={20} className="animate-spin" style={{ color: 'var(--text-muted)' }} />
+              <Loader2
+                size={28}
+                className="animate-spin"
+                style={{ color: '#9CA3AF' }}
+              />
             </motion.div>
           )}
 
@@ -191,59 +274,91 @@ function SearchPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
+              className="flex flex-col gap-3"
             >
-              <p className="px-5 pt-4 pb-3" style={{
-                fontSize: '0.6rem',
-                fontWeight: 600,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--text-muted)',
-              }}>
+              {/* Result count label */}
+              <p
+                style={{
+                  fontSize: '0.6rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: '#9CA3AF',
+                  marginBottom: '0.25rem',
+                }}
+              >
                 {results.length === 0
                   ? 'Nenhum resultado'
                   : `${results.length} resultado${results.length !== 1 ? 's' : ''}`}
               </p>
 
-              <div className="px-5">
-                {results.map((result, index) => (
+              {results.length === 0 ? (
+                <div className="flex flex-col items-center justify-center pt-12 px-4">
+                  <Search
+                    size={40}
+                    strokeWidth={1.2}
+                    style={{ color: '#9CA3AF', marginBottom: '1rem', opacity: 0.5 }}
+                  />
+                  <p
+                    style={{
+                      fontSize: '0.9375rem',
+                      color: '#9CA3AF',
+                      fontWeight: 400,
+                      textAlign: 'center',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Nenhum versículo encontrado para &ldquo;{query}&rdquo;
+                  </p>
+                </div>
+              ) : (
+                results.map((result, index) => (
                   <motion.button
                     key={`${result.bookId}-${result.chapter}-${result.verse}`}
                     onClick={() => handleResultClick(result)}
-                    className="w-full text-left py-4 transition-opacity active:opacity-50"
-                    style={{ borderBottom: '1px solid var(--border-subtle)' }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    className="w-full text-left active:scale-[0.97] transition-transform"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.15, delay: index * 0.02 }}
+                    style={{
+                      backgroundColor: 'var(--bg-card)',
+                      borderRadius: '1.25rem',
+                      boxShadow: '0 2px 8px rgba(23,25,28,0.06)',
+                      padding: '1rem 1.125rem',
+                    }}
                   >
-                    <span style={{
-                      display: 'block',
-                      fontSize: '0.6rem',
-                      fontWeight: 600,
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      color: 'var(--sage)',
-                      marginBottom: '0.35rem',
-                    }}>
+                    <span
+                      style={{
+                        display: 'block',
+                        fontSize: '0.6rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.14em',
+                        textTransform: 'uppercase',
+                        color: '#9CA3AF',
+                        marginBottom: '0.4rem',
+                      }}
+                    >
                       {result.bookName} {result.chapter}:{result.verse}
                     </span>
-                    <p style={{
-                      fontFamily: 'var(--font-serif)',
-                      fontSize: '0.9375rem',
-                      lineHeight: 1.65,
-                      color: 'var(--text-primary)',
-                      fontWeight: 400,
-                    }}
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-serif)',
+                        fontSize: '0.9375rem',
+                        lineHeight: 1.65,
+                        color: 'var(--text-primary)',
+                        fontWeight: 400,
+                      }}
                       className="line-clamp-3"
                     >
                       {highlightMatch(result.text, query)}
                     </p>
                   </motion.button>
-                ))}
-              </div>
+                ))
+              )}
             </motion.div>
           )}
 
-          {/* Histórico */}
+          {/* History */}
           {!isSearching && showHistory && (
             <motion.div
               key="history"
@@ -251,58 +366,84 @@ function SearchPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
+              className="flex flex-col gap-3"
             >
-              <div className="flex items-center justify-between px-5 pt-4 pb-3">
-                <p style={{
-                  fontSize: '0.6rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.15em',
-                  textTransform: 'uppercase',
-                  color: 'var(--text-muted)',
-                }}>
-                  Buscas recentes
+              {/* History header */}
+              <div className="flex items-center justify-between mb-1">
+                <p
+                  style={{
+                    fontSize: '0.6rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: '#9CA3AF',
+                  }}
+                >
+                  Buscas Recentes
                 </p>
                 <button
                   onClick={handleClearHistory}
                   className="transition-opacity active:opacity-50"
-                  style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 400 }}
+                  style={{
+                    fontSize: '0.75rem',
+                    color: '#9CA3AF',
+                    fontWeight: 500,
+                    fontFamily: 'var(--font-sans)',
+                  }}
                 >
                   Limpar
                 </button>
               </div>
 
-              <div className="px-5">
-                <AnimatePresence>
-                  {history.map((q, index) => (
-                    <motion.div
-                      key={q}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ delay: index * 0.04 }}
-                      layout
-                      className="flex items-center gap-3 py-3.5"
-                      style={{ borderBottom: '1px solid var(--border-subtle)' }}
+              <AnimatePresence>
+                {history.map((q, index) => (
+                  <motion.div
+                    key={q}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ delay: index * 0.04 }}
+                    layout
+                    className="flex items-center gap-3 active:scale-[0.97] transition-transform"
+                    style={{
+                      backgroundColor: 'var(--bg-card)',
+                      borderRadius: '1.25rem',
+                      boxShadow: '0 2px 8px rgba(23,25,28,0.06)',
+                      padding: '0.875rem 1.125rem',
+                    }}
+                  >
+                    <Clock
+                      size={15}
+                      strokeWidth={1.6}
+                      style={{ color: '#9CA3AF', flexShrink: 0 }}
+                    />
+                    <button
+                      className="flex-1 text-left transition-opacity active:opacity-70"
+                      style={{
+                        fontSize: '0.9375rem',
+                        color: 'var(--text-primary)',
+                        fontWeight: 400,
+                        fontFamily: 'var(--font-sans)',
+                      }}
+                      onClick={() => handleHistoryClick(q)}
                     >
-                      <Clock size={13} strokeWidth={1.4} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
-                      <button
-                        className="flex-1 text-left transition-opacity active:opacity-50"
-                        style={{ fontSize: '0.9375rem', color: 'var(--text-primary)', fontWeight: 300 }}
-                        onClick={() => handleHistoryClick(q)}
-                      >
-                        {q}
-                      </button>
-                      <button
-                        onClick={(e) => handleRemoveHistory(q, e)}
-                        className="shrink-0 transition-opacity active:opacity-50"
-                        style={{ color: 'var(--text-muted)' }}
-                      >
-                        <X size={13} />
-                      </button>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
+                      {q}
+                    </button>
+                    <button
+                      onClick={(e) => handleRemoveHistory(q, e)}
+                      className="shrink-0 transition-opacity active:opacity-50 flex items-center justify-center"
+                      style={{
+                        width: 22,
+                        height: 22,
+                        borderRadius: '50%',
+                        backgroundColor: 'var(--bg-secondary)',
+                      }}
+                    >
+                      <X size={11} style={{ color: '#9CA3AF' }} />
+                    </button>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </motion.div>
           )}
 
@@ -313,10 +454,22 @@ function SearchPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col items-center justify-center pt-20 px-8"
+              className="flex flex-col items-center justify-center pt-24 px-8"
             >
-              <Search size={32} strokeWidth={1.2} style={{ color: 'var(--text-muted)', marginBottom: '1rem', opacity: 0.5 }} />
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 300, textAlign: 'center' }}>
+              <Search
+                size={48}
+                strokeWidth={1.2}
+                style={{ color: '#9CA3AF', marginBottom: '1.25rem', opacity: 0.4 }}
+              />
+              <p
+                style={{
+                  fontSize: '0.9375rem',
+                  color: '#9CA3AF',
+                  fontWeight: 400,
+                  textAlign: 'center',
+                  lineHeight: 1.7,
+                }}
+              >
                 Digite uma palavra ou frase para buscar em toda a Bíblia
               </p>
             </motion.div>

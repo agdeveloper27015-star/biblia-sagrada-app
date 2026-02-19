@@ -7,7 +7,6 @@ import { LoadingSpinner } from './components/ui/LoadingSpinner'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const BooksPage = lazy(() => import('./pages/BooksPage'))
-const ChaptersPage = lazy(() => import('./pages/ChaptersPage'))
 const ReadPage = lazy(() => import('./pages/ReadPage'))
 const SearchPage = lazy(() => import('./pages/SearchPage'))
 const SavedPage = lazy(() => import('./pages/SavedPage'))
@@ -30,8 +29,7 @@ export function App() {
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route path="/" element={<Layout><HomePage /></Layout>} />
-              <Route path="/books" element={<Layout showNav={false}><BooksPage /></Layout>} />
-              <Route path="/books/:bookId" element={<Layout showNav={false}><ChaptersPage /></Layout>} />
+              <Route path="/books" element={<Layout><BooksPage /></Layout>} />
               <Route path="/read/:bookId?/:chapter?" element={<Layout showNav={false}><ReadPage /></Layout>} />
               <Route path="/search" element={<Layout><SearchPage /></Layout>} />
               <Route path="/saved" element={<Layout><SavedPage /></Layout>} />

@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Search, X, Loader2, Clock } from 'lucide-react'
 import { searchBible } from '../data/bible'
@@ -26,67 +26,6 @@ function highlightMatch(text: string, query: string): React.ReactNode {
       </mark>
       {after}
     </>
-  )
-}
-
-// ── Top Nav ──────────────────────────────────────────────────────
-function TopNav() {
-  const location = useLocation()
-  const isActive = (path: string) => location.pathname === path
-
-  const navLinkStyle = (path: string): React.CSSProperties => ({
-    fontFamily: 'var(--font-sans)',
-    fontSize: '0.8rem',
-    fontWeight: isActive(path) ? 700 : 500,
-    color: isActive(path) ? 'var(--accent)' : 'var(--text-muted)',
-    borderBottom: isActive(path) ? '2px solid var(--accent)' : '2px solid transparent',
-    paddingBottom: '2px',
-    textDecoration: 'none',
-    transition: 'color 0.15s',
-  })
-
-  return (
-    <nav
-      className="flex items-center justify-between px-5 py-3 shrink-0"
-      style={{ backgroundColor: 'var(--bg-page)' }}
-    >
-      {/* Left: Wave logo */}
-      <div style={{ color: 'var(--text-primary)' }}>
-        <svg width="32" height="14" viewBox="0 0 32 14" fill="none">
-          <path
-            d="M1 8.5C5.5 8.5 7.5 4.5 9 1.5C10.5 -1.5 14 1 16 5C18 9 20 12.5 24 12.5C28 12.5 31 10 31 10"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeWidth="2"
-          />
-        </svg>
-      </div>
-
-      {/* Center: nav links */}
-      <div className="flex items-center gap-5">
-        <Link to="/" style={navLinkStyle('/')}>Início</Link>
-        <Link to="/books" style={navLinkStyle('/books')}>Bíblia</Link>
-        <Link to="/profile" style={navLinkStyle('/profile')}>Config.</Link>
-      </div>
-
-      {/* Right: avatar */}
-      <button
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: '50%',
-          backgroundColor: 'var(--bg-card)',
-          border: '1.5px solid var(--border-medium)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: 'var(--shadow-sm)',
-          flexShrink: 0,
-        }}
-      >
-        <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-muted)' }}>U</span>
-      </button>
-    </nav>
   )
 }
 
@@ -182,25 +121,36 @@ function SearchPage() {
 
   return (
     <div
-      className="min-h-dvh pb-28 flex flex-col"
+      className="min-h-dvh pb-10 flex flex-col"
       style={{ backgroundColor: 'var(--bg-page)' }}
     >
-      <TopNav />
 
       {/* Page title + search input */}
-      <div className="px-5 pt-4 pb-5 shrink-0">
-        <h1
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '3rem',
-            fontWeight: 700,
+      <div className="px-5 pt-5 pb-5 shrink-0">
+        <div style={{ marginBottom: '1.25rem' }}>
+          <p style={{
+            fontFamily: '-apple-system, system-ui, sans-serif',
+            fontSize: '0.6rem',
+            fontWeight: 400,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+            marginBottom: '0.4rem',
+          }}>
+            Bíblia Sagrada
+          </p>
+          <h1 style={{
+            fontFamily: '-apple-system, system-ui, sans-serif',
+            fontSize: '2.25rem',
+            fontWeight: 200,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
             color: 'var(--text-primary)',
-            lineHeight: 1.1,
-            marginBottom: '1.25rem',
-          }}
-        >
-          Buscar
-        </h1>
+            lineHeight: 1,
+          }}>
+            Buscar
+          </h1>
+        </div>
 
         {/* Search input card */}
         <div

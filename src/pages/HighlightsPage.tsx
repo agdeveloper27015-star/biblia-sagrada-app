@@ -128,12 +128,30 @@ function HighlightsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: 'easeOut' as const }}
       >
-        <h1
-          className="text-[1.4rem] font-bold"
-          style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}
-        >
-          Destaques
-        </h1>
+        <div>
+          <p style={{
+            fontFamily: '-apple-system, system-ui, sans-serif',
+            fontSize: '0.6rem',
+            fontWeight: 400,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+            marginBottom: '0.4rem',
+          }}>
+            Bíblia Sagrada
+          </p>
+          <h1 style={{
+            fontFamily: '-apple-system, system-ui, sans-serif',
+            fontSize: '2.25rem',
+            fontWeight: 200,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'var(--text-primary)',
+            lineHeight: 1,
+          }}>
+            Destaques
+          </h1>
+        </div>
         {highlights.length > 0 && (
           <span
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"

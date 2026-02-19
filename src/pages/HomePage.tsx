@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Share2, BookOpen, Moon, Sun } from 'lucide-react'
+import { Share2, BookOpen } from 'lucide-react'
 import { getVerseOfTheDay, getChapter } from '../data/bible'
 import { getBookById } from '../data/books'
 import { useHighlights } from '../hooks/useHighlights'
-import { useTheme } from '../context/ThemeContext'
-import { getReadingProgress } from '../data/readingPlan'
 import type { Book, Verse } from '../types/bible'
 
 interface VerseOfTheDay { book: Book; chapter: number; verse: Verse }
@@ -14,18 +12,6 @@ interface LastRead { bookId: number; chapter: number; bookName: string }
 interface HighlightWithText {
   id: string; book: number; chapter: number; verse: number
   bookName: string; text: string; color: string
-}
-
-// wave logo SVG inline
-function WaveLogo() {
-  return (
-    <svg width="32" height="14" viewBox="0 0 32 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M1 8.5C5.5 8.5 7.5 4.5 9 1.5C10.5 -1.5 14 1 16 5C18 9 20 12.5 24 12.5C28 12.5 31 10 31 10"
-        stroke="currentColor" strokeLinecap="round" strokeWidth="2"
-      />
-    </svg>
-  )
 }
 
 const stagger = {
@@ -39,7 +25,6 @@ const fadeUp = {
 
 function HomePage() {
   const navigate = useNavigate()
-  const { theme, toggleTheme } = useTheme()
   const { highlights } = useHighlights()
 
   const [verseOfTheDay, setVerseOfTheDay] = useState<VerseOfTheDay | null>(null)
@@ -48,7 +33,6 @@ function HomePage() {
   const [highlightTexts, setHighlightTexts]   = useState<HighlightWithText[]>([])
   const [copied, setCopied]                   = useState(false)
 
-  const readingProgress = getReadingProgress()
 
   useEffect(() => {
     let cancelled = false
@@ -95,76 +79,24 @@ function HomePage() {
   }
 
   return (
-    <div className="min-h-dvh pb-28" style={{ backgroundColor: 'var(--bg-page)' }}>
-
-      {/* ── Top Nav ── */}
-      <header className="flex items-center justify-between px-5 pt-10 pb-5">
-        {/* Wave logo */}
-        <div style={{ color: 'var(--text-primary)' }}>
-          <WaveLogo />
-        </div>
-
-        {/* Nav links */}
-        <nav className="flex gap-5">
-          {[
-            { label: 'Início',   to: '/'       },
-            { label: 'Bíblia',   to: '/books'  },
-            { label: 'Config.',  to: '/profile' },
-          ].map(({ label, to }) => {
-            const isActive = to === '/'
-            return (
-              <Link
-                key={to}
-                to={to}
-                style={{
-                  fontSize: '0.8125rem',
-                  fontWeight: isActive ? 700 : 500,
-                  color: isActive ? 'var(--accent)' : 'var(--text-muted)',
-                  borderBottom: isActive ? '2px solid var(--accent)' : 'none',
-                  paddingBottom: isActive ? '2px' : '0',
-                  textDecoration: 'none',
-                  transition: 'color 0.15s',
-                }}
-              >
-                {label}
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/* Avatar / theme toggle */}
-        <button
-          onClick={toggleTheme}
-          className="flex items-center justify-center rounded-full border transition-colors"
-          style={{
-            width: '2.25rem', height: '2.25rem',
-            borderColor: 'var(--border-medium)',
-            backgroundColor: 'var(--bg-card)',
-            color: 'var(--text-primary)',
-          }}
-        >
-          {theme === 'dark'
-            ? <Sun size={15} strokeWidth={1.5} />
-            : <Moon size={15} strokeWidth={1.5} />}
-        </button>
-      </header>
+    <div className="min-h-dvh pb-10" style={{ backgroundColor: 'var(--bg-page)' }}>
 
       {/* ── Main ── */}
-      <main className="px-5 space-y-4">
+      <main className="px-5 pt-5 space-y-4">
         <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-4">
 
-          {/* ── Hero: "Bible" title + tagline ── */}
+          {/* ── Hero: "Versículo do dia" title + tagline ── */}
           <motion.div variants={fadeUp}>
             <div className="flex items-center justify-between mb-3">
               <h1 style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: '3.75rem',
-                fontWeight: 700,
-                letterSpacing: '-0.02em',
+                fontSize: '2.25rem',
+                fontWeight: 600,
+                letterSpacing: '-0.01em',
                 color: 'var(--text-primary)',
-                lineHeight: 1,
+                lineHeight: 1.1,
               }}>
-                Bíblia
+                Versículo do Dia
               </h1>
               <div
                 className="flex items-center justify-center rounded-2xl"
@@ -178,109 +110,58 @@ function HomePage() {
                 <BookOpen size={22} style={{ color: 'var(--text-primary)' }} strokeWidth={1.5} />
               </div>
             </div>
-            <div
-              className="rounded-xl p-5"
-              style={{ backgroundColor: 'var(--accent-dim)', border: '1px solid rgba(255,140,66,0.2)' }}
-            >
-              <p style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'var(--text-primary)', lineHeight: 1.55 }}>
-                Nós vamos te ajudar a aprofundar seu entendimento da Palavra de Deus todos os dias.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* ── Versículo do dia ── */}
-          <motion.div variants={fadeUp}>
-            <div className="py-4">
-              <h2 style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: '3rem',
-                fontWeight: 600,
-                letterSpacing: '-0.02em',
-                color: 'var(--text-primary)',
-                textAlign: 'center',
-                marginBottom: '1rem',
-              }}>
-                Versículo do Dia
-              </h2>
-
-              {/* Cards horizontal scroll */}
-              <div className="flex gap-4 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                {/* Último lido */}
-                <div
-                  className="shrink-0 flex flex-col justify-between rounded-2xl p-4"
-                  style={{ width: '16rem', height: '8rem', backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
-                >
-                  <div className="flex justify-between items-start">
-                    <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-                      Último Lido
-                    </span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
-                      <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  {lastRead ? (
-                    <button onClick={() => navigate(`/read/${lastRead.bookId}/${lastRead.chapter}`)} className="text-left">
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>
-                        {lastRead.bookName} {lastRead.chapter}
-                      </h3>
-                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Continuar leitura</p>
-                    </button>
-                  ) : (
-                    <Link to="/books">
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>
-                        Gênesis 1:1
-                      </h3>
-                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Comece a ler</p>
-                    </Link>
-                  )}
-                </div>
-
-                {/* Versículo do dia */}
-                {isLoadingVerse ? (
-                  <div className="shrink-0 rounded-2xl skeleton" style={{ width: '16rem', height: '8rem' }} />
-                ) : verseOfTheDay ? (
-                  <div
-                    className="shrink-0 flex flex-col justify-between rounded-2xl p-4 cursor-pointer"
-                    style={{ width: '16rem', height: '8rem', backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
-                    onClick={() => navigate(`/read/${verseOfTheDay.book.id}/${verseOfTheDay.chapter}`)}
+            {/* Card versículo do dia */}
+            {isLoadingVerse ? (
+              <div className="rounded-2xl skeleton" style={{ height: '7rem' }} />
+            ) : verseOfTheDay ? (
+              <button
+                onClick={() => navigate(`/read/${verseOfTheDay.book.id}/${verseOfTheDay.chapter}`)}
+                className="w-full text-left rounded-2xl p-5 transition-transform active:scale-[0.98]"
+                style={{ backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-card)', border: '1px solid var(--border-subtle)' }}
+              >
+                <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', display: 'block', marginBottom: '0.5rem' }}>
+                  {verseOfTheDay.book.name} {verseOfTheDay.chapter}:{verseOfTheDay.verse.verse}
+                </span>
+                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 400, color: 'var(--text-primary)', lineHeight: 1.65 }} className="line-clamp-3">
+                  {verseOfTheDay.verse.text}
+                </p>
+                <div className="flex items-center justify-between mt-3">
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                  {copied ? 'Copiado!' : 'Toque para ler o capítulo'}
+                </span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleShare(e) }}
+                    className="transition-opacity active:opacity-50"
                   >
-                    <div className="flex justify-between items-start">
-                      <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-                        Favorito
-                      </span>
-                      <button onClick={handleShare} className="transition-opacity active:opacity-50">
-                        <Share2 size={13} stroke="var(--text-muted)" strokeWidth={1.5} />
-                      </button>
-                    </div>
-                    <div>
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>
-                        {verseOfTheDay.book.name} {verseOfTheDay.chapter}:{verseOfTheDay.verse.verse}
-                      </h3>
-                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }} className="line-clamp-1">
-                        {copied ? 'Copiado!' : verseOfTheDay.verse.text}
-                      </p>
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
+                    <Share2 size={13} style={{ color: 'var(--text-muted)' }} strokeWidth={1.5} />
+                  </button>
+                </div>
+              </button>
+            ) : null}
           </motion.div>
+
 
           {/* ── Stats grid ── */}
           <motion.div variants={fadeUp}>
             <div className="grid grid-cols-2 gap-4">
-              {/* Progresso */}
-              <div
-                className="flex flex-col justify-between rounded-2xl p-5"
+              {/* Último lido */}
+              <button
+                onClick={() => lastRead ? navigate(`/read/${lastRead.bookId}/${lastRead.chapter}`) : navigate('/books')}
+                className="flex flex-col justify-between rounded-2xl p-5 text-left transition-transform active:scale-[0.97]"
                 style={{ height: '10rem', backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
               >
-                <span style={{ fontSize: '0.8125rem', fontWeight: 500, color: 'var(--text-muted)', lineHeight: 1.3 }}>
-                  Plano de<br />leitura
+                <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+                  Último Lido
                 </span>
-                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '3rem', fontWeight: 500, color: 'var(--text-primary)', lineHeight: 1 }}>
-                  {readingProgress.percentage}%
-                </span>
-              </div>
+                <div>
+                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.1rem', fontWeight: 500, color: 'var(--text-primary)', lineHeight: 1.2, display: 'block' }}>
+                    {lastRead ? `${lastRead.bookName} ${lastRead.chapter}` : 'Gênesis 1'}
+                  </span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--accent)', marginTop: '0.25rem', display: 'block' }}>
+                    {lastRead ? 'Continuar' : 'Começar'}
+                  </span>
+                </div>
+              </button>
 
               {/* Destaques / CTA */}
               <Link

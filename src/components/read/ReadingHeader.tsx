@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { ArrowLeft, Settings, ChevronDown } from 'lucide-react'
-import { cn } from '../../lib/cn'
 
 interface ReadingHeaderProps {
   bookName: string
@@ -22,70 +21,77 @@ export function ReadingHeader({
   const clampedProgress = Math.min(1, Math.max(0, progress))
 
   return (
-    <header className="sticky top-0 z-50">
-      {/* Progress bar */}
+    <header
+      className="sticky top-0 z-50"
+      style={{
+        backgroundColor: 'color-mix(in srgb, var(--bg-card) 80%, transparent)',
+        backdropFilter: 'blur(20px) saturate(1.4)',
+        WebkitBackdropFilter: 'blur(20px) saturate(1.4)',
+        paddingTop: 'env(safe-area-inset-top)',
+      }}
+    >
+      {/* Header content */}
+      <div className="flex items-center justify-between px-3 py-2">
+
+        {/* Left: Back button */}
+        <button
+          onClick={onBack}
+          className="p-2 rounded-full transition-opacity active:opacity-50"
+          aria-label="Voltar"
+        >
+          <ArrowLeft size={20} strokeWidth={1.75} style={{ color: 'var(--text-primary)' }} />
+        </button>
+
+        {/* Center: Book name + chapter */}
+        <button
+          onClick={onBookSelect}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-opacity active:opacity-60"
+          style={{ backgroundColor: 'var(--bg-card)' }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: '0.9375rem',
+              fontWeight: 600,
+              color: 'var(--text-primary)',
+            }}
+          >
+            {bookName} {chapter}
+          </span>
+          <ChevronDown size={14} strokeWidth={2} style={{ color: 'var(--text-muted)' }} />
+        </button>
+
+        {/* Right: Settings */}
+        <button
+          onClick={onSettings}
+          className="p-2 rounded-full transition-opacity active:opacity-50"
+          aria-label="Configurações de leitura"
+        >
+          <Settings size={20} strokeWidth={1.75} style={{ color: 'var(--text-primary)' }} />
+        </button>
+      </div>
+
+      {/* Barra de progresso */}
       <div
-        className="h-[3px] w-full"
-        style={{ backgroundColor: 'var(--bg-tertiary)' }}
+        className="h-[2px] w-full"
+        style={{ backgroundColor: 'transparent' }}
       >
         <motion.div
-          className="h-full rounded-r-full"
-          style={{ backgroundColor: 'var(--color-secondary)' }}
+          className="h-full"
+          style={{ backgroundColor: 'var(--accent)', opacity: 0.7 }}
           initial={{ width: 0 }}
           animate={{ width: `${clampedProgress * 100}%` }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
         />
       </div>
 
-      {/* Header content */}
+      {/* Divider com degrade nas bordas */}
       <div
-        className={cn(
-          'flex items-center justify-between px-2 py-2',
-          'backdrop-blur-xl backdrop-saturate-150'
-        )}
         style={{
-          backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
-          borderBottom: '1px solid var(--border-subtle)',
+          height: '1px',
+          background: 'linear-gradient(to right, transparent 0%, var(--border-subtle) 15%, var(--border-subtle) 85%, transparent 100%)',
         }}
-      >
-        {/* Left: Back button */}
-        <button
-          onClick={onBack}
-          className="p-2 rounded-full transition-colors hover:bg-[var(--bg-secondary)]"
-          aria-label="Voltar"
-        >
-          <ArrowLeft size={22} style={{ color: 'var(--text-primary)' }} />
-        </button>
-
-        {/* Center: Book name + chapter */}
-        <button
-          onClick={onBookSelect}
-          className={cn(
-            'flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors',
-            'hover:bg-[var(--bg-secondary)] active:bg-[var(--bg-tertiary)]'
-          )}
-        >
-          <span
-            className="text-base font-semibold"
-            style={{ color: 'var(--text-primary)' }}
-          >
-            {bookName} {chapter}
-          </span>
-          <ChevronDown
-            size={16}
-            style={{ color: 'var(--text-muted)' }}
-          />
-        </button>
-
-        {/* Right: Settings */}
-        <button
-          onClick={onSettings}
-          className="p-2 rounded-full transition-colors hover:bg-[var(--bg-secondary)]"
-          aria-label="Configurações de leitura"
-        >
-          <Settings size={22} style={{ color: 'var(--text-primary)' }} />
-        </button>
-      </div>
+      />
     </header>
   )
 }

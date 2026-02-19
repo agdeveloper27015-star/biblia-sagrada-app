@@ -7,7 +7,7 @@
 
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
-  --font-display: 'Playfair Display', Georgia, serif;
+  --font-display: 'DM Sans', system-ui, sans-serif;
 }
 
 /* ===== Default (Dark) Theme — paleta da gaveta ===== */
@@ -38,32 +38,36 @@
   --shadow-accent:   0 4px 14px rgba(255,140,66,0.4);
 }
 
-/* ===== Light Theme ===== */
+/* ===== Light Theme — Monochrome Premium ===== */
 .light {
-  --accent:      #E8720C;
-  --accent-dim:  rgba(232,114,12,0.12);
-  --accent-glow: rgba(232,114,12,0.25);
+  --accent:      #111111;
+  --accent-dim:  rgba(17,17,17,0.07);
+  --accent-glow: rgba(17,17,17,0.12);
 
-  --bg-page:      #F5F2EE;
-  --bg-primary:   #F5F2EE;
-  --bg-card:      #FFFFFF;
-  --bg-secondary: #EDE9E4;
-  --bg-input:     #FFFFFF;
-  --bg-sidebar:   #EDE9E4;
+  /* Cinza médio com cards brancos — profundidade visível */
+  --bg-page:      #DCDCDC;
+  --bg-primary:   #DCDCDC;
+  --bg-card:      #F5F5F5;
+  --bg-secondary: #D0D0D0;
+  --bg-input:     #F5F5F5;
+  --bg-sidebar:   #D8D8D8;
 
-  --text-primary:   #1C1A18;
-  --text-secondary: #4A4440;
-  --text-muted:     #9C9490;
+  /* Texto — escala de cinza com muito contraste */
+  --text-primary:   #0A0A0A;
+  --text-secondary: #444444;
+  --text-muted:     #AAAAAA;
 
-  --border-subtle: rgba(28,26,24,0.08);
-  --border-medium: rgba(28,26,24,0.14);
+  /* Bordas quase invisíveis */
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-medium: rgba(0,0,0,0.11);
 
-  --shadow-sm:       0 1px 3px rgba(28,26,24,0.08);
-  --shadow-card:     0 2px 8px rgba(28,26,24,0.08), 0 1px 3px rgba(28,26,24,0.05);
-  --shadow-elevated: 0 8px 24px rgba(28,26,24,0.12);
-  --shadow-modal:    0 16px 48px rgba(28,26,24,0.18);
-  --shadow-nav:      0 -1px 0 rgba(28,26,24,0.08);
-  --shadow-accent:   0 4px 14px rgba(232,114,12,0.3);
+  /* Sombras elegantes — difusas e profundas */
+  --shadow-sm:       0 1px 3px rgba(0,0,0,0.06), 0 1px 8px rgba(0,0,0,0.04);
+  --shadow-card:     0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-elevated: 0 12px 40px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-modal:    0 24px 80px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.10);
+  --shadow-nav:      0 1px 0 rgba(0,0,0,0.06);
+  --shadow-accent:   0 4px 20px rgba(0,0,0,0.18);
 }
 
 /* ===== Base ===== */

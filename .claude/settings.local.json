@@ -44,7 +44,9 @@
       "Bash(node_modules/.bin/tsc:*)",
       "Bash(\"/Users/antonielgomes/Documents/projeto biblia - claude/node_modules/.bin/tsc\" --noEmit --project \"/Users/antonielgomes/Documents/projeto biblia - claude/tsconfig.json\")",
       "Bash(export PATH:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(\"/Users/antonielgomes/Documents/projeto biblia:*)",
+      "Bash(lsof:*)"
     ]
   }
 }

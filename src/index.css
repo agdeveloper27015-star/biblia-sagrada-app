@@ -73,7 +73,10 @@
 /* ===== Base ===== */
 * { -webkit-tap-highlight-color: transparent; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-page);
+}
 
 body {
   font-family: var(--font-sans);

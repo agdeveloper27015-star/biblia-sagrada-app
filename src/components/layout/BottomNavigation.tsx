@@ -17,12 +17,12 @@ const pageTitles: Record<string, string> = {
   '/highlights': 'Destaques',
 }
 
-function getGreeting() {
-  const h = new Date().getHours()
-  if (h < 12) return 'Bom dia'
-  if (h < 18) return 'Boa tarde'
-  return 'Boa noite'
-}
+// function getGreeting() {
+//   const h = new Date().getHours()
+//   if (h < 12) return 'Bom dia'
+//   if (h < 18) return 'Boa tarde'
+//   return 'Boa noite'
+// }
 
 function getInitials(email: string) {
   return email.slice(0, 2).toUpperCase()
@@ -70,16 +70,17 @@ export function TopBar() {
           <p
             style={{
               fontFamily: '-apple-system, system-ui, sans-serif',
-              fontSize: '1.1rem',
-              fontWeight: 200,
-              letterSpacing: '0.18em',
+              fontSize: '0.8rem',
+              fontWeight: 300,
+              letterSpacing: '0.2em',
               textTransform: 'uppercase',
               color: 'var(--text-primary)',
-              lineHeight: 1.2,
+              lineHeight: 1,
+              whiteSpace: 'nowrap',
             }}
           >
-            {getGreeting()},&nbsp;
-            <span style={{ fontWeight: 500 }}>{firstName}</span>
+            A paz do Senhor,&nbsp;
+            <span style={{ fontWeight: 600 }}>{firstName}</span>
           </p>
         ) : (
           /* Título da página nas demais */

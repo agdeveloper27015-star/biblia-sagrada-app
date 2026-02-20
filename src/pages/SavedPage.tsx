@@ -491,7 +491,7 @@ function SavedPage() {
     { key: 'notes', label: 'Notas', icon: StickyNote, count: notes.length },
   ]
 
-  const pageTitle = activeTab === 'favorites' ? 'Favoritos' : 'Suas Notas'
+  // const pageTitle = activeTab === 'favorites' ? 'Favoritos' : 'Suas Notas'
   const itemCount = activeTab === 'favorites' ? favorites.length : notes.length
 
   return (

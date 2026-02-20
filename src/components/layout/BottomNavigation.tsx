@@ -61,6 +61,7 @@ export function TopBar() {
         backgroundColor: 'color-mix(in srgb, var(--bg-card) 35%, transparent)',
         backdropFilter: 'blur(24px) saturate(1.6)',
         WebkitBackdropFilter: 'blur(24px) saturate(1.6)',
+        paddingTop: 'env(safe-area-inset-top)',
       }}
     >
       <div className="px-5 pt-3 pb-1 flex items-center justify-between">
@@ -70,9 +71,9 @@ export function TopBar() {
           <p
             style={{
               fontFamily: '-apple-system, system-ui, sans-serif',
-              fontSize: '0.8rem',
+              fontSize: '0.72rem',
               fontWeight: 300,
-              letterSpacing: '0.2em',
+              letterSpacing: '0.14em',
               textTransform: 'uppercase',
               color: 'var(--text-primary)',
               lineHeight: 1,

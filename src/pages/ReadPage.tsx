@@ -244,7 +244,7 @@ function ReadPage() {
         bookName={currentBook?.name ?? ''}
         chapter={currentChapterNum}
         progress={scrollProgress}
-        onBack={() => navigate(`/books/${currentBookId}`)}
+        onBack={() => navigate('/books')}
         onBookSelect={() => setShowBookSelector(true)}
         onSettings={() => setShowSettings(true)}
       />

@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
 const navItems = [
@@ -7,6 +7,15 @@ const navItems = [
   { to: '/search',  label: 'Pesquisa' },
   { to: '/profile', label: 'Perfil'   },
 ]
+
+const pageTitles: Record<string, string> = {
+  '/':        '',
+  '/books':   'Leitura',
+  '/search':  'Pesquisa',
+  '/saved':   'Salvos',
+  '/profile': 'Perfil',
+  '/highlights': 'Destaques',
+}
 
 function getGreeting() {
   const h = new Date().getHours()
@@ -19,9 +28,12 @@ function getInitials(email: string) {
   return email.slice(0, 2).toUpperCase()
 }
 
-// ── Top bar: saudação + avatar ────────────────────────────────────────────────
+// ── Top bar ───────────────────────────────────────────────────────────────────
 export function TopBar() {
   const { user } = useAuth()
+  const location = useLocation()
+
+  const isHome = location.pathname === '/'
 
   const displayName = user?.user_metadata?.full_name
     ?? user?.email
@@ -40,6 +52,8 @@ export function TopBar() {
       ? getInitials(user.email)
       : 'VI'
 
+  const pageTitle = pageTitles[location.pathname] ?? ''
+
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50"
@@ -47,22 +61,42 @@ export function TopBar() {
         backgroundColor: 'color-mix(in srgb, var(--bg-card) 35%, transparent)',
         backdropFilter: 'blur(24px) saturate(1.6)',
         WebkitBackdropFilter: 'blur(24px) saturate(1.6)',
-        paddingTop: 'max(0.875rem, env(safe-area-inset-top))',
       }}
     >
-      <div className="px-5 pt-1 pb-3 flex items-center justify-between">
-        <p
-          style={{
-            fontSize: '1.125rem',
-            fontWeight: 400,
-            color: 'var(--text-primary)',
-            fontFamily: 'var(--font-sans)',
-            lineHeight: 1.2,
-          }}
-        >
-          {getGreeting()},&nbsp;
-          <span style={{ fontWeight: 600 }}>{firstName}</span>
-        </p>
+      <div className="px-5 pt-3 pb-1 flex items-center justify-between">
+
+        {isHome ? (
+          /* Saudação na homepage */
+          <p
+            style={{
+              fontFamily: '-apple-system, system-ui, sans-serif',
+              fontSize: '1.1rem',
+              fontWeight: 200,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'var(--text-primary)',
+              lineHeight: 1.2,
+            }}
+          >
+            {getGreeting()},&nbsp;
+            <span style={{ fontWeight: 500 }}>{firstName}</span>
+          </p>
+        ) : (
+          /* Título da página nas demais */
+          <p
+            style={{
+              fontFamily: '-apple-system, system-ui, sans-serif',
+              fontSize: '1.1rem',
+              fontWeight: 200,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'var(--text-primary)',
+              lineHeight: 1.2,
+            }}
+          >
+            {pageTitle}
+          </p>
+        )}
 
         {/* Avatar circle */}
         <div
@@ -93,7 +127,7 @@ export function TopBar() {
   )
 }
 
-// ── Bottom nav: links de navegação ────────────────────────────────────────────
+// ── Bottom nav ────────────────────────────────────────────────────────────────
 export function BottomNavigation() {
   return (
     <nav

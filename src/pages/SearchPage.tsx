@@ -127,30 +127,6 @@ function SearchPage() {
 
       {/* Page title + search input */}
       <div className="px-5 pt-5 pb-5 shrink-0">
-        <div style={{ marginBottom: '1.25rem' }}>
-          <p style={{
-            fontFamily: '-apple-system, system-ui, sans-serif',
-            fontSize: '0.6rem',
-            fontWeight: 400,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--text-muted)',
-            marginBottom: '0.4rem',
-          }}>
-            Bíblia Sagrada
-          </p>
-          <h1 style={{
-            fontFamily: '-apple-system, system-ui, sans-serif',
-            fontSize: '2.25rem',
-            fontWeight: 200,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--text-primary)',
-            lineHeight: 1,
-          }}>
-            Buscar
-          </h1>
-        </div>
 
         {/* Search input card */}
         <div

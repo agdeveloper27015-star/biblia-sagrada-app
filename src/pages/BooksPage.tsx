@@ -110,33 +110,6 @@ function BooksPage() {
       {/* ── Main content ── */}
       <main className="px-5 pt-5 space-y-6">
 
-        {/* Page title */}
-        <div>
-          <p style={{
-            fontFamily: '-apple-system, system-ui, sans-serif',
-            fontSize: '0.6rem',
-            fontWeight: 400,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--text-muted)',
-            marginBottom: '0.4rem',
-          }}>
-            Bíblia Sagrada
-          </p>
-          <h1
-            style={{
-              fontFamily: '-apple-system, system-ui, sans-serif',
-              fontSize: '2.25rem',
-              fontWeight: 200,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--text-primary)',
-              lineHeight: 1,
-            }}
-          >
-            Livros
-          </h1>
-        </div>
 
         {/* Search */}
         <div

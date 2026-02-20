@@ -504,30 +504,6 @@ function SavedPage() {
       <div className="px-5 pt-5 pb-2 shrink-0">
         <div className="flex items-start justify-between">
           <div>
-            <div style={{ marginBottom: '0.35rem' }}>
-              <p style={{
-                fontFamily: '-apple-system, system-ui, sans-serif',
-                fontSize: '0.6rem',
-                fontWeight: 400,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'var(--text-muted)',
-                marginBottom: '0.4rem',
-              }}>
-                Bíblia Sagrada
-              </p>
-              <h1 style={{
-                fontFamily: '-apple-system, system-ui, sans-serif',
-                fontSize: '2.25rem',
-                fontWeight: 200,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: 'var(--text-primary)',
-                lineHeight: 1,
-              }}>
-                {pageTitle}
-              </h1>
-            </div>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 400 }}>
               {itemCount === 0
                 ? 'Nenhum item salvo'

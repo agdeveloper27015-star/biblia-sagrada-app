@@ -69,31 +69,6 @@ function ProfilePage() {
 
       <div className="px-5 pt-5 pb-6 flex flex-col gap-4">
 
-        {/* ── Page title ── */}
-        <div style={{ marginBottom: '0.25rem' }}>
-          <p style={{
-            fontFamily: '-apple-system, system-ui, sans-serif',
-            fontSize: '0.6rem',
-            fontWeight: 400,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--text-muted)',
-            marginBottom: '0.4rem',
-          }}>
-            Bíblia Sagrada
-          </p>
-          <h1 style={{
-            fontFamily: '-apple-system, system-ui, sans-serif',
-            fontSize: '2.25rem',
-            fontWeight: 200,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--text-primary)',
-            lineHeight: 1,
-          }}>
-            Configurações
-          </h1>
-        </div>
 
         {/* ── User card ── */}
         <div

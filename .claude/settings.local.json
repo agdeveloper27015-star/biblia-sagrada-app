@@ -46,7 +46,8 @@
       "Bash(export PATH:*)",
       "Bash(node:*)",
       "Bash(\"/Users/antonielgomes/Documents/projeto biblia:*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
     ]
   }
 }

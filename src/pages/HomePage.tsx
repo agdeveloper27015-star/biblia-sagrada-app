@@ -163,23 +163,39 @@ function HomePage() {
                 </div>
               </button>
 
-              {/* Destaques / CTA */}
+              {/* Anotações */}
               <Link
-                to="/saved"
+                to="/notes"
                 className="relative flex flex-col justify-between rounded-2xl p-5 overflow-hidden"
                 style={{ height: '10rem', backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
               >
+                {/* Seta diagonal */}
                 <div className="absolute top-4 right-4">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: 'var(--text-primary)' }}>
                     <path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-                <div className="flex gap-1 mt-auto">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--text-primary)' }} />
-                  <div className="w-2 h-2 rounded-full border" style={{ borderColor: 'var(--text-muted)' }} />
+
+                {/* Ícone caderno */}
+                <div className="mt-auto mb-2">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style={{ color: 'var(--text-primary)' }}>
+                    {/* Capa do caderno */}
+                    <rect x="7" y="4" width="18" height="24" rx="2.5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                    {/* Espiral esquerda */}
+                    <line x1="7" y1="4" x2="7" y2="28" stroke="currentColor" strokeWidth="1.5"/>
+                    <circle cx="7" cy="9"  r="1.5" fill="currentColor"/>
+                    <circle cx="7" cy="14" r="1.5" fill="currentColor"/>
+                    <circle cx="7" cy="19" r="1.5" fill="currentColor"/>
+                    <circle cx="7" cy="24" r="1.5" fill="currentColor"/>
+                    {/* Linhas de texto */}
+                    <line x1="12" y1="11" x2="22" y2="11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/>
+                    <line x1="12" y1="15" x2="22" y2="15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/>
+                    <line x1="12" y1="19" x2="19" y2="19" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/>
+                  </svg>
                 </div>
-                <h3 style={{ fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-primary)', lineHeight: 1.3, marginTop: '0.5rem' }}>
-                  Meus<br />Destaques
+
+                <h3 style={{ fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-primary)', lineHeight: 1.3 }}>
+                  Minhas<br />Anotações
                 </h3>
               </Link>
             </div>

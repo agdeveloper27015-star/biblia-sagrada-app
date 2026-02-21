@@ -9,11 +9,13 @@ const navItems = [
 ]
 
 const pageTitles: Record<string, string> = {
-  '/':        '',
-  '/books':   'Leitura',
-  '/search':  'Pesquisa',
-  '/saved':   'Salvos',
-  '/profile': 'Perfil',
+  '/':           '',
+  '/books':      'Leitura',
+  '/search':     'Pesquisa',
+  '/saved':      'Salvos',
+  '/notes':      'Salvos',
+  '/favorites':  'Salvos',
+  '/profile':    'Perfil',
   '/highlights': 'Destaques',
 }
 
@@ -64,7 +66,7 @@ export function TopBar() {
         paddingTop: 'env(safe-area-inset-top)',
       }}
     >
-      <div className="px-5 pt-3 pb-1 flex items-center justify-between">
+      <div className="px-5 py-2.5 flex items-center justify-between">
 
         {isHome ? (
           /* Saudação na homepage */

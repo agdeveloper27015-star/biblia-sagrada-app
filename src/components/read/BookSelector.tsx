@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronRight } from 'lucide-react'
 import { books } from '../../data/books'
@@ -56,6 +57,34 @@ export function BookSelector({
   const activeBookRef = useRef<HTMLButtonElement>(null)
   const activeChapterRef = useRef<HTMLButtonElement>(null)
 
+  // Drag-to-close refs
+  const dragY = useRef(0)
+  const startY = useRef(0)
+  const sheetRef = useRef<HTMLDivElement>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    startY.current = e.touches[0]?.clientY ?? 0
+    dragY.current = 0
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const dy = (e.touches[0]?.clientY ?? startY.current) - startY.current
+    dragY.current = dy
+    if (dy > 0 && sheetRef.current) {
+      sheetRef.current.style.transform = `translateY(${dy}px)`
+      sheetRef.current.style.transition = 'none'
+    }
+  }
+
+  const handleTouchEnd = () => {
+    if (dragY.current > 80) {
+      onClose()
+    } else if (sheetRef.current) {
+      sheetRef.current.style.transform = 'translateY(0)'
+      sheetRef.current.style.transition = 'transform 0.3s cubic-bezier(0.32,0.72,0,1)'
+    }
+  }
+
   // Reset selected book when opening
   useEffect(() => {
     if (isOpen) {
@@ -105,23 +134,27 @@ export function BookSelector({
     [selectedBook, onSelect, onClose],
   )
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 z-[90]"
-            style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+            className="fixed inset-0 z-[200]"
+            style={{ backgroundColor: 'rgba(0,0,0,0.5)', touchAction: 'none' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => { e.stopPropagation(); e.preventDefault() }}
+            onTouchEnd={(e) => e.stopPropagation()}
           />
 
           {/* Drawer panel */}
           <motion.div
-            className="fixed inset-x-0 bottom-0 z-[100] flex flex-col"
+            ref={sheetRef}
+            className="fixed inset-x-0 bottom-0 z-[201] flex flex-col"
             style={{
               height: '82dvh',
               backgroundColor: '#1C1C1E',
@@ -131,14 +164,23 @@ export function BookSelector({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 260 }}
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
           >
             {/* ── Handle + Header ─────────────────────────────── */}
             <div className="shrink-0 px-5 pt-3 pb-4">
               {/* Drag handle */}
               <div
-                className="mx-auto mb-4 rounded-full"
-                style={{ width: 36, height: 4, backgroundColor: 'rgba(255,255,255,0.2)' }}
-              />
+                className="flex justify-center pb-3 cursor-grab"
+                style={{ touchAction: 'none' }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
+                <div className="mx-auto rounded-full" style={{ width: 36, height: 4, backgroundColor: 'rgba(255,255,255,0.2)' }} />
+              </div>
 
               {/* Current selection indicator */}
               <div className="flex items-center justify-between">
@@ -290,6 +332,7 @@ export function BookSelector({
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   )
 }

@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen,
@@ -54,6 +55,34 @@ export function VerseActionSheet({
 }: VerseActionSheetProps) {
   const [showHighlightColors, setShowHighlightColors] = useState(false)
 
+  // Drag-to-close refs
+  const dragY = useRef(0)
+  const startY = useRef(0)
+  const sheetRef = useRef<HTMLDivElement>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    startY.current = e.touches[0]?.clientY ?? 0
+    dragY.current = 0
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const dy = (e.touches[0]?.clientY ?? startY.current) - startY.current
+    dragY.current = dy
+    if (dy > 0 && sheetRef.current) {
+      sheetRef.current.style.transform = `translateY(${dy}px)`
+      sheetRef.current.style.transition = 'none'
+    }
+  }
+
+  const handleTouchEnd = () => {
+    if (dragY.current > 80) {
+      onClose()
+    } else if (sheetRef.current) {
+      sheetRef.current.style.transform = 'translateY(0)'
+      sheetRef.current.style.transition = 'transform 0.3s cubic-bezier(0.32,0.72,0,1)'
+    }
+  }
+
   const handleClose = useCallback(() => {
     setShowHighlightColors(false)
     onClose()
@@ -107,40 +136,47 @@ export function VerseActionSheet({
     handleClose()
   }, [onNote, handleClose])
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-[100] flex items-end justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
+        <>
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-black/40"
-            onClick={handleClose}
+            className="fixed inset-0 z-[200] bg-black/40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={handleClose}
+            style={{ touchAction: 'none' }}
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => { e.stopPropagation(); e.preventDefault() }}
+            onTouchEnd={(e) => e.stopPropagation()}
           />
 
           {/* Sheet */}
           <motion.div
-            className="relative z-10 w-full max-w-lg rounded-t-2xl pb-safe"
+            ref={sheetRef}
+            className="fixed inset-x-0 bottom-0 z-[201] w-full max-w-lg mx-auto rounded-t-2xl pb-safe"
             style={{ backgroundColor: 'var(--bg-card)' }}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
           >
             {/* Drag handle */}
-            <div className="flex justify-center pt-3 pb-1">
-              <div
-                className="w-10 h-1 rounded-full"
-                style={{ backgroundColor: 'var(--border-medium)' }}
-              />
+            <div
+              className="flex justify-center pt-3 pb-1 cursor-grab"
+              style={{ touchAction: 'none' }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              <div className="w-10 h-1 rounded-full" style={{ backgroundColor: 'var(--border-medium)' }} />
             </div>
 
             {/* Verse reference */}
@@ -244,7 +280,6 @@ export function VerseActionSheet({
                               currentHighlightColor === item.color &&
                                 'ring-2 ring-offset-2 ring-[var(--color-secondary)]'
                             )}
-                            style={{}}
                             aria-label={item.label}
                             title={item.label}
                           />
@@ -304,8 +339,9 @@ export function VerseActionSheet({
               </button>
             </div>
           </motion.div>
-        </motion.div>
+        </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   )
 }

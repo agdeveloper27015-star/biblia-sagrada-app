@@ -13,7 +13,7 @@ export function Layout({ children, showNav = true }: LayoutProps) {
       {showNav && <TopBar />}
       {/* pt-16 = espaço para o top bar, pb-16 = espaço para o bottom nav */}
       <main
-        className={showNav ? 'pb-20' : ''}
+        className={showNav ? 'pb-16' : ''}
         style={showNav ? { paddingTop: 'calc(env(safe-area-inset-top) + 3.5rem)' } : {}}
       >{children}</main>
       {showNav && <BottomNavigation />}

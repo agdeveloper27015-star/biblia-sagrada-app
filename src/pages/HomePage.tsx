@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Share2, BookOpen } from 'lucide-react'
+import { Share2, BookOpen, ArrowRight } from 'lucide-react'
 import { getVerseOfTheDay, getChapter } from '../data/bible'
 import { getBookById } from '../data/books'
 import { useHighlights } from '../hooks/useHighlights'
@@ -16,11 +16,11 @@ interface HighlightWithText {
 
 const stagger = {
   hidden: { opacity: 0 },
-  show:   { opacity: 1, transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+  show:   { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.04 } },
 }
 const fadeUp = {
-  hidden: { opacity: 0, y: 14 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
+  hidden: { opacity: 0, y: 16 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' as const } },
 }
 
 function HomePage() {
@@ -28,11 +28,10 @@ function HomePage() {
   const { highlights } = useHighlights()
 
   const [verseOfTheDay, setVerseOfTheDay] = useState<VerseOfTheDay | null>(null)
-  const [isLoadingVerse, setIsLoadingVerse]   = useState(true)
-  const [lastRead, setLastRead]               = useState<LastRead | null>(null)
-  const [highlightTexts, setHighlightTexts]   = useState<HighlightWithText[]>([])
-  const [copied, setCopied]                   = useState(false)
-
+  const [isLoadingVerse, setIsLoadingVerse] = useState(true)
+  const [lastRead, setLastRead]            = useState<LastRead | null>(null)
+  const [highlightTexts, setHighlightTexts] = useState<HighlightWithText[]>([])
+  const [copied, setCopied]                = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -79,152 +78,206 @@ function HomePage() {
   }
 
   return (
-    <div className="min-h-dvh pb-10" style={{ backgroundColor: 'var(--bg-page)' }}>
-
-      {/* ── Main ── */}
-      <main className="px-5 pt-5 space-y-4">
+    <div className="min-h-dvh pb-4" style={{ backgroundColor: 'var(--bg-page)' }}>
+      <main className="px-5 pt-5">
         <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-4">
 
-          {/* ── Hero: "Versículo do dia" title + tagline ── */}
+          {/* ── Versículo do Dia ── */}
           <motion.div variants={fadeUp}>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-3.5">
               <h1 style={{
                 fontFamily: 'var(--font-serif)',
                 fontSize: '2.25rem',
                 fontWeight: 600,
-                letterSpacing: '-0.01em',
+                letterSpacing: '-0.02em',
                 color: 'var(--text-primary)',
-                lineHeight: 1.1,
+                lineHeight: 1.05,
               }}>
-                Versículo do Dia
+                Versículo<br />do Dia
               </h1>
               <div
                 className="flex items-center justify-center rounded-2xl"
                 style={{
-                  width: '3.5rem', height: '3.5rem',
+                  width: '3.25rem', height: '3.25rem',
                   backgroundColor: 'var(--bg-card)',
-                  boxShadow: 'var(--shadow-sm)',
                   border: '1px solid var(--border-subtle)',
                 }}
               >
-                <BookOpen size={22} style={{ color: 'var(--text-primary)' }} strokeWidth={1.5} />
+                <BookOpen size={20} strokeWidth={1.4} style={{ color: 'var(--text-secondary)' }} />
               </div>
             </div>
-            {/* Card versículo do dia */}
+
+            {/* Card versículo */}
             {isLoadingVerse ? (
-              <div className="rounded-2xl skeleton" style={{ height: '7rem' }} />
+              <div className="rounded-2xl skeleton" style={{ height: '7.5rem' }} />
             ) : verseOfTheDay ? (
               <button
                 onClick={() => navigate(`/read/${verseOfTheDay.book.id}/${verseOfTheDay.chapter}`)}
-                className="w-full text-left rounded-2xl p-5 transition-transform active:scale-[0.98]"
-                style={{ backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-card)', border: '1px solid var(--border-subtle)' }}
+                className="w-full text-left rounded-2xl p-5 transition-transform active:scale-[0.985]"
+                style={{
+                  backgroundColor: 'var(--bg-card)',
+                  border: '1px solid var(--border-subtle)',
+                  boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                }}
               >
-                <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', display: 'block', marginBottom: '0.5rem' }}>
+                {/* Referência */}
+                <span style={{
+                  fontSize: '0.58rem', fontWeight: 800, letterSpacing: '0.18em',
+                  textTransform: 'uppercase', color: 'var(--accent)',
+                  display: 'block', marginBottom: '0.625rem',
+                }}>
                   {verseOfTheDay.book.name} {verseOfTheDay.chapter}:{verseOfTheDay.verse.verse}
                 </span>
-                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 400, color: 'var(--text-primary)', lineHeight: 1.65 }} className="line-clamp-3">
+
+                {/* Texto */}
+                <p style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: '1.0625rem',
+                  fontWeight: 400,
+                  color: 'var(--text-primary)',
+                  lineHeight: 1.7,
+                }} className="line-clamp-3">
                   {verseOfTheDay.verse.text}
                 </p>
-                <div className="flex items-center justify-between mt-3">
-                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                  {copied ? 'Copiado!' : 'Toque para ler o capítulo'}
-                </span>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between mt-3.5" style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '0.75rem' }}>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 400 }}>
+                    {copied ? '✓ Copiado' : 'Toque para ler o capítulo'}
+                  </span>
                   <button
                     onClick={(e) => { e.stopPropagation(); handleShare(e) }}
-                    className="transition-opacity active:opacity-50"
+                    className="flex items-center justify-center rounded-full transition-all active:opacity-50"
+                    style={{ width: '1.75rem', height: '1.75rem', backgroundColor: 'var(--bg-secondary)' }}
                   >
-                    <Share2 size={13} style={{ color: 'var(--text-muted)' }} strokeWidth={1.5} />
+                    <Share2 size={12} strokeWidth={1.8} style={{ color: 'var(--text-muted)' }} />
                   </button>
                 </div>
               </button>
             ) : null}
           </motion.div>
 
-
-          {/* ── Stats grid ── */}
+          {/* ── Grid: Último Lido + Anotações ── */}
           <motion.div variants={fadeUp}>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
+
               {/* Último lido */}
               <button
                 onClick={() => lastRead ? navigate(`/read/${lastRead.bookId}/${lastRead.chapter}`) : navigate('/books')}
-                className="flex flex-col justify-between rounded-2xl p-5 text-left transition-transform active:scale-[0.97]"
-                style={{ height: '10rem', backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
+                className="flex flex-col justify-between rounded-2xl p-4 text-left transition-transform active:scale-[0.97]"
+                style={{
+                  height: '10rem',
+                  backgroundColor: 'var(--bg-card)',
+                  border: '1px solid var(--border-subtle)',
+                }}
               >
-                <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+                <span style={{
+                  fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.14em',
+                  textTransform: 'uppercase', color: 'var(--text-muted)',
+                }}>
                   Último Lido
                 </span>
                 <div>
-                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.1rem', fontWeight: 500, color: 'var(--text-primary)', lineHeight: 1.2, display: 'block' }}>
+                  <span style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: '1.1rem', fontWeight: 500,
+                    color: 'var(--text-primary)', lineHeight: 1.2, display: 'block',
+                  }}>
                     {lastRead ? `${lastRead.bookName} ${lastRead.chapter}` : 'Gênesis 1'}
                   </span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--accent)', marginTop: '0.25rem', display: 'block' }}>
-                    {lastRead ? 'Continuar' : 'Começar'}
-                  </span>
+                  <div className="flex items-center gap-1 mt-2">
+                    <span style={{ fontSize: '0.72rem', color: 'var(--accent)', fontWeight: 600 }}>
+                      {lastRead ? 'Continuar' : 'Começar'}
+                    </span>
+                    <ArrowRight size={11} strokeWidth={2.5} style={{ color: 'var(--accent)' }} />
+                  </div>
                 </div>
               </button>
 
-              {/* Anotações */}
+              {/* Minhas Anotações */}
               <Link
                 to="/notes"
-                className="relative flex flex-col justify-between rounded-2xl p-5 overflow-hidden"
-                style={{ height: '10rem', backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
+                className="relative flex flex-col justify-between rounded-2xl p-4 overflow-hidden transition-transform active:scale-[0.97]"
+                style={{
+                  height: '10rem',
+                  backgroundColor: 'var(--bg-card)',
+                  border: '1px solid var(--border-subtle)',
+                }}
               >
                 {/* Seta diagonal */}
-                <div className="absolute top-4 right-4">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: 'var(--text-primary)' }}>
+                <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ color: 'var(--text-muted)', opacity: 0.5 }}>
                     <path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
 
                 {/* Ícone caderno */}
-                <div className="mt-auto mb-2">
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style={{ color: 'var(--text-primary)' }}>
-                    {/* Capa do caderno */}
+                <div style={{ marginTop: 'auto', marginBottom: '0.5rem' }}>
+                  <svg width="30" height="30" viewBox="0 0 32 32" fill="none" style={{ color: 'var(--text-primary)' }}>
                     <rect x="7" y="4" width="18" height="24" rx="2.5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                    {/* Espiral esquerda */}
                     <line x1="7" y1="4" x2="7" y2="28" stroke="currentColor" strokeWidth="1.5"/>
                     <circle cx="7" cy="9"  r="1.5" fill="currentColor"/>
                     <circle cx="7" cy="14" r="1.5" fill="currentColor"/>
                     <circle cx="7" cy="19" r="1.5" fill="currentColor"/>
                     <circle cx="7" cy="24" r="1.5" fill="currentColor"/>
-                    {/* Linhas de texto */}
-                    <line x1="12" y1="11" x2="22" y2="11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/>
-                    <line x1="12" y1="15" x2="22" y2="15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/>
-                    <line x1="12" y1="19" x2="19" y2="19" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.5"/>
+                    <line x1="12" y1="11" x2="22" y2="11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.4"/>
+                    <line x1="12" y1="15" x2="22" y2="15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.4"/>
+                    <line x1="12" y1="19" x2="19" y2="19" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" opacity="0.4"/>
                   </svg>
                 </div>
 
-                <h3 style={{ fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-primary)', lineHeight: 1.3 }}>
+                <h3 style={{
+                  fontWeight: 700, fontSize: '0.72rem',
+                  textTransform: 'uppercase', letterSpacing: '0.07em',
+                  color: 'var(--text-primary)', lineHeight: 1.35,
+                }}>
                   Minhas<br />Anotações
                 </h3>
               </Link>
             </div>
           </motion.div>
 
-          {/* ── Dark CTA card ── */}
+          {/* ── CTA Leitura ── */}
           <motion.div variants={fadeUp}>
             <Link
               to="/books"
-              className="relative flex flex-col justify-between rounded-2xl p-6 overflow-hidden"
-              style={{ backgroundColor: 'var(--accent)', minHeight: '9rem' }}
+              className="relative flex flex-col justify-between rounded-2xl overflow-hidden transition-transform active:scale-[0.985]"
+              style={{ backgroundColor: 'var(--text-primary)', minHeight: '8.5rem', padding: '1.5rem' }}
             >
-              {/* Decorative blur */}
-              <div style={{ position: 'absolute', right: '-2.5rem', top: '-2.5rem', width: '8rem', height: '8rem', background: 'rgba(255,255,255,0.05)', borderRadius: '9999px', filter: 'blur(24px)' }} />
-              <div className="relative z-10">
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#ffffff', marginBottom: '2.5rem', lineHeight: 1.3 }}>
+              {/* Brilho decorativo */}
+              <div style={{
+                position: 'absolute', right: '-3rem', top: '-3rem',
+                width: '10rem', height: '10rem',
+                background: 'rgba(255,255,255,0.04)',
+                borderRadius: '9999px', filter: 'blur(32px)',
+              }} />
+              <div style={{
+                position: 'absolute', left: '-1rem', bottom: '-2rem',
+                width: '7rem', height: '7rem',
+                background: 'rgba(255,255,255,0.03)',
+                borderRadius: '9999px', filter: 'blur(20px)',
+              }} />
+
+              <div className="relative z-10 flex flex-col h-full justify-between">
+                <h3 style={{
+                  fontSize: '1.25rem', fontWeight: 300,
+                  letterSpacing: '0.08em', textTransform: 'uppercase',
+                  color: 'var(--bg-page)', lineHeight: 1.25,
+                }}>
                   Vamos ler<br />a Bíblia
                 </h3>
-                <div className="flex items-center justify-between">
-                  <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+                <div className="flex items-center justify-between mt-6">
+                  <span style={{
+                    fontSize: '0.58rem', color: 'rgba(255,255,255,0.35)',
+                    letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 600,
+                  }}>
                     Começar leitura
                   </span>
                   <div
                     className="flex items-center justify-center rounded-full"
-                    style={{ width: '3rem', height: '3rem', backgroundColor: '#ffffff' }}
+                    style={{ width: '2.75rem', height: '2.75rem', backgroundColor: 'var(--bg-page)' }}
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--bg-page)" strokeWidth="2">
-                      <path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    <ArrowRight size={16} strokeWidth={2} style={{ color: 'var(--text-primary)' }} />
                   </div>
                 </div>
               </div>
@@ -233,29 +286,47 @@ function HomePage() {
 
           {/* ── Destaques recentes ── */}
           {highlightTexts.length > 0 && (
-            <motion.div variants={fadeUp}>
+            <motion.div variants={fadeUp} className="pb-2">
               <div className="flex items-center justify-between mb-3">
-                <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+                <span style={{
+                  fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.16em',
+                  textTransform: 'uppercase', color: 'var(--text-muted)',
+                }}>
                   Destaques Recentes
                 </span>
-                <Link to="/saved" style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-primary)' }}>
+                <Link to="/saved" style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-primary)', opacity: 0.7 }}>
                   Ver todos
                 </Link>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {highlightTexts.map((h) => (
                   <button
                     key={h.id}
                     onClick={() => navigate(`/read/${h.book}/${h.chapter}`)}
-                    className="w-full text-left rounded-2xl p-4 transition-all active:scale-[0.98]"
-                    style={{ backgroundColor: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}
+                    className="w-full text-left rounded-2xl p-4 transition-transform active:scale-[0.98] flex items-center gap-3"
+                    style={{
+                      backgroundColor: 'var(--bg-card)',
+                      border: '1px solid var(--border-subtle)',
+                    }}
                   >
-                    <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.35rem' }}>
-                      {h.bookName} {h.chapter}:{h.verse}
-                    </span>
-                    <p style={{ fontSize: '0.9375rem', lineHeight: 1.55, color: 'var(--text-primary)', fontWeight: 400 }} className="line-clamp-2">
-                      {h.text}
-                    </p>
+                    {/* Accent bar */}
+                    <div style={{ width: 3, alignSelf: 'stretch', borderRadius: 9999, backgroundColor: 'var(--accent)', flexShrink: 0, opacity: 0.7 }} />
+                    <div className="min-w-0">
+                      <span style={{
+                        fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.14em',
+                        textTransform: 'uppercase', color: 'var(--text-muted)',
+                        display: 'block', marginBottom: '0.3rem',
+                      }}>
+                        {h.bookName} {h.chapter}:{h.verse}
+                      </span>
+                      <p style={{
+                        fontFamily: 'var(--font-serif)',
+                        fontSize: '0.9375rem', lineHeight: 1.6,
+                        color: 'var(--text-primary)', fontWeight: 400,
+                      }} className="line-clamp-2">
+                        {h.text}
+                      </p>
+                    </div>
                   </button>
                 ))}
               </div>

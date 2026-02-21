@@ -209,7 +209,7 @@ function BooksPage() {
   [])
 
   return (
-    <div className="min-h-dvh pb-10" style={{ backgroundColor: 'var(--bg-page)' }}>
+    <div className="min-h-dvh" style={{ backgroundColor: 'var(--bg-page)' }}>
       <main className="px-5 pt-5 space-y-6">
 
         {/* ── Search ── */}
@@ -256,7 +256,7 @@ function BooksPage() {
             </motion.div>
           ) : (
             <motion.div key="list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="pb-32 space-y-10">
+              className="pb-36 space-y-10">
               {categorySections.map((section, si) => (
                 <motion.div
                   key={section.label}

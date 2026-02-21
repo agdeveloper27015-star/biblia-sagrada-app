@@ -174,69 +174,91 @@ body {
 .scripture-container {
   font-family: var(--font-serif);
   font-size: var(--reader-font-size, 1.125rem);
-  line-height: var(--reader-line-height, 1.95);
+  line-height: var(--reader-line-height, 1.9);
   max-width: var(--reader-max-width, 68ch);
   margin: 0 auto;
   color: var(--text-primary);
   font-weight: 400;
 }
 
+/* ── Base scripture block ── */
 .scripture-smart {
   font-family: var(--font-serif);
-  font-size: var(--reader-font-size, 1.1rem);
-  line-height: var(--reader-line-height, 1.95);
+  font-size: var(--reader-font-size, 1.05rem);
+  line-height: var(--reader-line-height, 1.9);
   color: var(--text-primary);
   font-weight: 400;
+  /* Optical margin — respira dos cantos da tela */
+  letter-spacing: 0.005em;
 }
 
+/* ── Modo parágrafo ── */
 .scripture-smart-paragraph {
-  margin-bottom: 1.25em;
+  margin-bottom: 1.4em;
   text-indent: 1.5em;
+  hanging-punctuation: first;
 }
+.scripture-smart-paragraph:first-child { text-indent: 0; }
+.scripture-smart-paragraph:last-child  { margin-bottom: 0; }
 
-.scripture-smart-paragraph:last-child { margin-bottom: 0; }
+/* ── Modo versículo por versículo ── */
+.scripture-block     { margin-bottom: 0; }
+.scripture-block-sep { margin-top: 1.1em; }
 
-.scripture-block { margin-bottom: 0.25em; }
-.scripture-block-sep { margin-top: 1em; }
-
+/* ── Número de versículo ── */
 .scripture-versenum {
   font-family: var(--font-sans);
-  font-size: 0.55em;
+  font-size: 0.52em;
   font-weight: 700;
   color: var(--accent);
   vertical-align: super;
-  margin-right: 0.2em;
+  line-height: 0;              /* evita deslocamento de baseline */
+  margin-right: 0.25em;
   user-select: none;
+  opacity: 0.85;
+}
+.scripture-versenum-first {
+  font-size: 0.65em;
 }
 
-.scripture-versenum-first { font-size: 0.7em; }
-
-.scripture-stanza { margin-bottom: 1.5em; }
-.scripture-stanza:last-child { margin-bottom: 0; }
-.scripture-poetic-indented { padding-left: 2em !important; }
+/* ── Poesia ── */
+.scripture-stanza              { margin-bottom: 1.6em; }
+.scripture-stanza:last-child   { margin-bottom: 0; }
+.scripture-poetic-indented     { padding-left: 2.2em !important; }
 
 .scripture-sela {
   font-family: var(--font-sans);
-  font-size: 0.6em;
+  font-size: 0.58em;
   font-style: italic;
   color: var(--text-muted);
-  margin-left: 1em;
+  margin-left: 1.2em;
+  letter-spacing: 0.05em;
   user-select: none;
+  opacity: 0.65;
 }
 
+/* ── Diálogo / narrador ── */
 .scripture-narrator { color: var(--text-secondary); font-style: normal; }
-.scripture-speech { font-style: italic; }
+.scripture-speech   { font-style: italic; }
 
+/* ── Inline verse (área clicável) ── */
 .scripture-inline-verse {
   cursor: pointer;
-  border-radius: 0.2rem;
-  padding: 0.05em 0.1em;
-  margin: 0 -0.1em;
-  transition: background-color 0.1s ease;
+  border-radius: 0.25rem;
+  padding: 0.12em 0.15em;
+  margin: 0 -0.15em;
+  transition: background-color 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+  /* Espaço vertical confortável para toque */
+  display: block;
+  padding-top: 0.18em;
+  padding-bottom: 0.18em;
+}
+.scripture-inline-verse:active {
+  background-color: var(--accent-dim);
 }
 
-.scripture-inline-verse:hover { background-color: var(--accent-dim); }
-
+/* Layout grade (legado) */
 .scripture-verse-list { display: block; }
 
 .scripture-verse {
@@ -245,43 +267,49 @@ body {
   gap: 0.5rem;
   padding: 0.35rem 0.25rem;
   border-radius: 0.75rem;
-  transition: background-color 0.1s ease;
+  transition: background-color 0.12s ease;
   cursor: pointer;
 }
-
-.scripture-verse:hover { background-color: var(--accent-dim); }
+.scripture-verse:active { background-color: var(--accent-dim); }
 
 .scripture-verse-number {
   font-family: var(--font-sans);
-  font-size: 0.625rem;
+  font-size: 0.6rem;
   font-weight: 700;
   color: var(--accent);
   padding-top: 0.35rem;
   text-align: right;
   user-select: none;
+  opacity: 0.85;
 }
 
 .scripture-verse-text { padding-right: 0.25rem; }
 
 /* ===== Highlight colors ===== */
-.highlight-yellow { background-color: rgba(253,224,71,0.30);  border-radius: 0.15rem; }
-.highlight-green  { background-color: rgba(134,239,172,0.25); border-radius: 0.15rem; }
-.highlight-blue   { background-color: rgba(147,197,253,0.25); border-radius: 0.15rem; }
-.highlight-pink   { background-color: rgba(244,114,182,0.22); border-radius: 0.15rem; }
-.highlight-orange { background-color: rgba(255,140,66,0.28);  border-radius: 0.15rem; }
-.highlight-white  { background-color: rgba(255,255,255,0.15); border-radius: 0.15rem; }
-.highlight-gray   { background-color: rgba(180,180,180,0.15); border-radius: 0.15rem; }
-.highlight-black  { background-color: rgba(0,0,0,0.25);       border-radius: 0.15rem; }
+/* Sutis, semi-transparentes — funcionam no light e dark */
+.highlight-yellow { background-color: rgba(253,224,71,0.28);  border-radius: 0.2rem; }
+.highlight-green  { background-color: rgba(134,239,172,0.22); border-radius: 0.2rem; }
+.highlight-blue   { background-color: rgba(147,197,253,0.22); border-radius: 0.2rem; }
+.highlight-pink   { background-color: rgba(244,114,182,0.20); border-radius: 0.2rem; }
+.highlight-orange { background-color: rgba(255,140,66,0.22);  border-radius: 0.2rem; }
+.highlight-white  { background-color: rgba(255,255,255,0.12); border-radius: 0.2rem; }
+.highlight-gray   { background-color: rgba(160,160,160,0.14); border-radius: 0.2rem; }
+.highlight-black  { background-color: rgba(0,0,0,0.18);       border-radius: 0.2rem; }
 
 /* ===== Verse markers ===== */
+/* Favorito: barra esquerda fina e elegante */
 .verse-favorited {
-  border-left: 2px solid var(--accent);
-  padding-left: 0.5rem;
-  margin-left: -0.625rem;
+  border-left: 2.5px solid var(--accent);
+  padding-left: 0.55rem !important;
+  margin-left: -0.7rem;
+  opacity: 1;
 }
 
+/* Nota: sublinhado pontilhado bem sutil */
 .verse-has-note {
-  border-bottom: 1px dotted var(--accent);
+  border-bottom: 1.5px dotted var(--accent);
+  padding-bottom: 0.04em;
+  opacity: 1;
 }
 
 /* ===== Tags ===== */

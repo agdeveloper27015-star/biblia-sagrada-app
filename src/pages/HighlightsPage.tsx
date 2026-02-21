@@ -120,7 +120,7 @@ function HighlightsPage() {
   const isLoading = isHighlightsLoading || isLoadingTexts
 
   return (
-    <div className="min-h-dvh px-4 pt-5 pb-6">
+    <div className="min-h-dvh px-4 pt-5 pb-2">
       {/* Header */}
       <motion.div
         className="flex items-center gap-3 mb-5"

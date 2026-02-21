@@ -7,7 +7,7 @@ import { useHighlights } from '../hooks/useHighlights'
 import { useNotes } from '../hooks/useNotes'
 import { readingSettingsStorage, type ReadingSettings } from '../lib/storage'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
-import { BookSelector } from '../components/read/BookSelector'
+import { ChapterPicker } from '../components/read/ChapterPicker'
 import { ReadingHeader } from '../components/read/ReadingHeader'
 import { ScriptureView } from '../components/read/ScriptureView'
 import { VerseActionSheet } from '../components/read/VerseActionSheet'
@@ -44,7 +44,7 @@ function ReadPage() {
 
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null)
   const [selectedCtx, setSelectedCtx] = useState({ bookId: initialBookId, chapter: initialChapter })
-  const [showBookSelector, setShowBookSelector] = useState(false)
+  const [showChapterPicker, setShowChapterPicker] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [showDictionary, setShowDictionary] = useState(false)
   const [showNoteEditor, setShowNoteEditor] = useState(false)
@@ -245,7 +245,7 @@ function ReadPage() {
         chapter={currentChapterNum}
         progress={scrollProgress}
         onBack={() => navigate('/books')}
-        onBookSelect={() => setShowBookSelector(true)}
+        onBookSelect={() => setShowChapterPicker(true)}
         onSettings={() => setShowSettings(true)}
       />
 
@@ -277,13 +277,20 @@ function ReadPage() {
 
               return (
                 <div key={ch.key}>
-                  {/* Divisor entre capítulos */}
+                  {/* ── Divisor entre capítulos (idx > 0) ── */}
                   {idx > 0 && (
-                    <div className="flex items-center gap-3 px-8 pt-8 pb-2">
+                    <div className="flex items-center gap-4 px-6 pt-10 pb-0">
                       <div className="flex-1 h-px" style={{ backgroundColor: 'var(--border-subtle)' }} />
                       <span
-                        className="text-[0.62rem] font-bold uppercase tracking-[0.18em]"
-                        style={{ color: 'var(--text-muted)' }}
+                        style={{
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: '0.6rem',
+                          fontWeight: 700,
+                          letterSpacing: '0.18em',
+                          textTransform: 'uppercase',
+                          color: 'var(--text-muted)',
+                          opacity: 0.6,
+                        }}
                       >
                         {ch.book.name} {ch.chapterNum}
                       </span>
@@ -291,34 +298,67 @@ function ReadPage() {
                     </div>
                   )}
 
-                  {/* Chapter header (sentinel para IntersectionObserver) */}
+                  {/* ── Chapter heading (sentinel IntersectionObserver) ── */}
                   <div
                     ref={(el) => {
                       if (el) chapterHeaderRefs.current.set(ch.key, el)
                       else chapterHeaderRefs.current.delete(ch.key)
                     }}
-                    className="text-center pt-8 pb-5"
+                    style={{
+                      textAlign: 'center',
+                      paddingTop: idx === 0 ? '2.5rem' : '1.75rem',
+                      paddingBottom: '2rem',
+                    }}
                   >
+                    {/* Nome do livro — apenas no primeiro capítulo carregado */}
                     {idx === 0 && (
-                      <h2
-                        className="text-base font-semibold mb-1"
-                        style={{ color: 'var(--text-secondary)' }}
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-serif)',
+                          fontSize: '1.1rem',
+                          fontWeight: 600,
+                          letterSpacing: '0.08em',
+                          color: 'var(--text-muted)',
+                          marginBottom: '0.5rem',
+                          textTransform: 'uppercase',
+                        }}
                       >
                         {ch.book.name}
-                      </h2>
+                      </p>
                     )}
+
+                    {/* Número do capítulo — destaque tipográfico */}
                     <span
-                      className="text-[3.5rem] font-bold leading-none"
-                      style={{ color: 'var(--text-primary)' }}
+                      style={{
+                        fontFamily: 'var(--font-serif)',
+                        fontSize: '5rem',
+                        fontWeight: 700,
+                        lineHeight: 1,
+                        color: 'var(--text-primary)',
+                        letterSpacing: '-0.03em',
+                        display: 'block',
+                      }}
                     >
                       {ch.chapterNum}
                     </span>
+
+                    {/* Linha ornamental abaixo do número */}
+                    <div
+                      style={{
+                        width: '2rem',
+                        height: '2px',
+                        backgroundColor: 'var(--accent)',
+                        borderRadius: 9999,
+                        margin: '1rem auto 0',
+                        opacity: 0.7,
+                      }}
+                    />
                   </div>
 
                   {/* Scripture */}
                   <div
-                    className="mx-auto px-5 pb-10"
-                    style={{ maxWidth: 'var(--reader-max-width)' }}
+                    className="mx-auto pb-14"
+                    style={{ maxWidth: 'var(--reader-max-width)', paddingLeft: '1.375rem', paddingRight: '1.375rem' }}
                   >
                     <ScriptureView
                       verses={ch.data.verses}
@@ -335,9 +375,16 @@ function ReadPage() {
               )
             })}
 
-            {/* Sentinel + loading next */}
-            <div ref={sentinelRef} className="flex justify-center py-8">
-              {isLoadingNext && <LoadingSpinner size="sm" />}
+            {/* Sentinel + loading next chapter */}
+            <div ref={sentinelRef} className="flex flex-col items-center py-12 gap-3">
+              {isLoadingNext && (
+                <>
+                  <LoadingSpinner size="sm" />
+                  <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.5 }}>
+                    Carregando...
+                  </span>
+                </>
+              )}
             </div>
           </>
         )}
@@ -361,10 +408,10 @@ function ReadPage() {
         onNote={handleOpenNote}
       />
 
-      <BookSelector
-        isOpen={showBookSelector}
-        onClose={() => setShowBookSelector(false)}
-        onSelect={(bookId, chapter) => { setShowBookSelector(false); navigateToChapter(bookId, chapter) }}
+      <ChapterPicker
+        isOpen={showChapterPicker}
+        onClose={() => setShowChapterPicker(false)}
+        onSelect={(bookId, chapter) => navigateToChapter(bookId, chapter)}
         currentBookId={currentBookId}
         currentChapter={currentChapterNum}
       />

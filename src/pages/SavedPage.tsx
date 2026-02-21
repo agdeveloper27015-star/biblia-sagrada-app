@@ -377,7 +377,7 @@ function NotesTab() {
   )
 
   return (
-    <div className="flex flex-col gap-3 pb-24">
+    <div className="flex flex-col gap-3 pb-4">
       {/* Search */}
       <div className="flex items-center gap-3 px-4 py-2.5 mb-1"
         style={{ backgroundColor: 'var(--bg-card)', borderRadius: '0.875rem', border: '1px solid var(--border-subtle)' }}>

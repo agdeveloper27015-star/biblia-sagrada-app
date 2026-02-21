@@ -89,13 +89,12 @@ export function TopBar() {
           /* Título da página nas demais */
           <p
             style={{
-              fontFamily: '-apple-system, system-ui, sans-serif',
-              fontSize: '1.1rem',
-              fontWeight: 200,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
+              fontFamily: 'var(--font-serif)',
+              fontSize: '1.35rem',
+              fontWeight: 600,
+              letterSpacing: '-0.01em',
               color: 'var(--text-primary)',
-              lineHeight: 1.2,
+              lineHeight: 1,
             }}
           >
             {pageTitle}
@@ -163,13 +162,12 @@ export function BottomNavigation() {
                 style={{
                   fontFamily: 'var(--font-sans)',
                   fontSize: '0.6875rem',
-                  fontWeight: isActive ? 800 : 500,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  color: isActive ? 'var(--accent)' : 'var(--text-muted)',
-                  borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
-                  paddingBottom: '1px',
-                  transition: 'color 0.15s',
+                  fontWeight: isActive ? 700 : 400,
+                  letterSpacing: '0.03em',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                  borderBottom: isActive ? '1.5px solid var(--text-primary)' : '1.5px solid transparent',
+                  paddingBottom: '2px',
+                  transition: 'color 0.15s, border-color 0.15s',
                   whiteSpace: 'nowrap',
                 }}
               >

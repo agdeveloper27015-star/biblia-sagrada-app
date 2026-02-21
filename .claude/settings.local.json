@@ -47,7 +47,15 @@
       "Bash(node:*)",
       "Bash(\"/Users/antonielgomes/Documents/projeto biblia:*)",
       "Bash(lsof:*)",
-      "mcp__Claude_in_Chrome__tabs_context_mcp"
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(bash -c 'cd \"\"/Users/antonielgomes/Documents/projeto biblia - claude\"\" && npm run build 2>&1 | tail -30')",
+      "Bash(bash -c 'cd \"\"/Users/antonielgomes/Documents/projeto biblia - claude\"\" && npm run build 2>&1')",
+      "Bash(bash -c 'cd \"\"/Users/antonielgomes/Documents/projeto biblia - claude\"\" && npm run build 2>&1 | tail -15')",
+      "Bash(bash -c 'cd \"\"/Users/antonielgomes/Documents/projeto biblia - claude\"\" && npm run build 2>&1 | tail -10')",
+      "Bash(bash -c 'cd \"\"/Users/antonielgomes/Documents/projeto biblia - claude\"\" && npm run build 2>&1 | tail -8')",
+      "Bash(bash -c 'cd \"\"/Users/antonielgomes/Documents/projeto biblia - claude\"\" && npm run build 2>&1 | tail -6')",
+      "Bash(bash -c 'cd \"\"/Users/antonielgomes/Documents/projeto biblia - claude\"\" && npm run build 2>&1 | tail -5')",
+      "Bash(bash -c:*)"
     ]
   }
 }

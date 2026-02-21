@@ -12,7 +12,10 @@ export function Layout({ children, showNav = true }: LayoutProps) {
     <div className="min-h-dvh" style={{ backgroundColor: 'var(--bg-primary)' }}>
       {showNav && <TopBar />}
       {/* pt-16 = espaço para o top bar, pb-16 = espaço para o bottom nav */}
-      <main className={showNav ? 'pt-16 pb-20' : ''}>{children}</main>
+      <main
+        className={showNav ? 'pb-20' : ''}
+        style={showNav ? { paddingTop: 'calc(env(safe-area-inset-top) + 3.5rem)' } : {}}
+      >{children}</main>
       {showNav && <BottomNavigation />}
     </div>
   )
